@@ -1,60 +1,105 @@
 import {
-  StyleSheet,
   View,
   Image,
   ScrollView,
-  FlatList,
   TextInput,
   Pressable,
   Text,
+  Linking
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import React, { useState } from "react";
-import loginIcon from "../assets/loginIcon.png"
+import React from "react";
+import imagenes from "../assets/images.js";
+import { Shadow } from "react-native-shadow-2";
+import Icon from 'react-native-vector-icons/Ionicons';
+
 export function Main() {
   const insets = useSafeAreaInsets();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   return (
-    <View style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}>
-      <View  style={styles.container}>
-
-        <ScrollView>
+    <View
+      style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
+      className="w-full h-full flex-1"
+    >
+      <Shadow
+        className="w-full bg-white rounded-b-xl"
+        distance={9}
+        startColor={"#00000030"}
+        offset={[0, 10]}
+      >
+        <View className="flex flex-row items-center justify-around h-20">
           <Image
-            source={loginIcon}
-            style={{ width: 120, height: 100 }}
+            source={imagenes.IconMujer}
+            className="h-full max-h-full "
+            style={{ resizeMode: "contain" }}
           />
-          <Text style={styles.title}>Login</Text>
-          <Text style={styles.subTitle}>Usuario</Text>
-          <TextInput
-            placeholder="Ingrese su usuario"
-            style={styles.searchInput}
+          <Text className=""> RutinFit </Text>
+          <Image
+            source={imagenes.IconHombre}
+            className="h-full max-h-full "
+            style={{ resizeMode: "contain" }}
           />
-          <Text style={styles.subTitle}>Contraseña</Text>
-          <TextInput
-          placeholder="Ingrese su contraseña"
-          style={styles.searchInput}
-          secureTextEntry
-           />
-           <Pressable style={({pressed}) => [{
-            backgroundColor: pressed ? '#0FA05A' : '#82E5B5',
-           },
+        </View>
+      </Shadow>
 
-           ]}>
-           
-            <Text style={styles.buttonText}>Iniciar Sesión</Text>
-           </Pressable>
-        </ScrollView>
-      </View>
+      <ScrollView
+        className=""
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <View className="">
+          <View className="border w-72 flex bg-slate-200 items-center">
+            <Image source={imagenes.loginIcon} />
+            <Text className="">Login</Text>
+            <Text>Usuario</Text>
+            <TextInput placeholder="Ingrese su usuario" />
+            <Text>Contraseña</Text>
+            <TextInput placeholder="Ingrese su contraseña" secureTextEntry />
+            <Pressable
+              style={({ pressed }) => [
+                {
+                  backgroundColor: pressed ? "#0FA05A" : "#82E5B5",
+                },
+              ]}
+            >
+              <Text>Iniciar Sesión</Text>
+            </Pressable>
+          </View>
+        </View>
+      </ScrollView>
+      <Shadow
+        className="w-full bg-white rounded-t-xl mt-0"
+        distance={9}
+        startColor={"#00000030"}
+        offset={[10, 0]}
+      >
+        <View className="flex flex-row">
+          <View className="bg-slate-400">
+            <Text> ¿Quienes somos?</Text>
+            <Text> Contáctanos: </Text>
+            <Text> correo@ejemplo.com </Text>
+          </View>
+          <View>
+            <Text> Siguemos en nuestras redes sociales </Text>
+            <View>
+              <Pressable>
+                <Icon name="logo-facebook" size={30} />
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Shadow>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: "#fff",
+//     alignItems: "center",
+//     justifyContent: "center",
+//   },
+// });

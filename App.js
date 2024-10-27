@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
-import { Main } from "./components/Main";
+import { Login } from "./components/Login";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function App() {
@@ -8,7 +8,7 @@ export default function App() {
     <SafeAreaProvider>
       <View style={styles.container}>
         <StatusBar style="auto" />
-        <Main />
+        <Login />
       </View>
     </SafeAreaProvider>
   );

@@ -1,6 +1,5 @@
 import React from "react";
 import { Modal, View, Text, Pressable, ScrollView } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 export default function ModalPersonalizado({
@@ -8,6 +7,7 @@ export default function ModalPersonalizado({
   onclose,
   titulo,
   mensajes,
+  accion
 }) {
   return (
     <Modal
@@ -50,7 +50,10 @@ export default function ModalPersonalizado({
               </View>
             ))}
             <Pressable
-              onPress={onclose}
+              onPress={() => {
+                accion();
+                onclose();
+              }}
               className=""
               style={{
                 backgroundColor: "#82E5B5",

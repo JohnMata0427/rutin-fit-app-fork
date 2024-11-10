@@ -16,6 +16,8 @@ import Footer from "../layouts/Footer.jsx";
 export function Login( { navigation } ) {
 
   const insets = useSafeAreaInsets();
+  
+
   return (
     <View
       style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
@@ -60,6 +62,7 @@ export function Login( { navigation } ) {
               />
             </View>
             <Pressable
+            onPress={() =>  navigation.navigate("Datos")}
               style={{
                 backgroundColor: "#82E5B5",
                 padding: 10,
@@ -74,7 +77,7 @@ export function Login( { navigation } ) {
             >
               <View className="flex-row flex-wrap justify-center w-full">
                 <Text className="">¿Olvidaste tu contraseña?</Text>
-                <Pressable style={{}}>
+                <Pressable onPress={() => navigation.navigate("OlvidarPassword")}>
                   {({ pressed }) => (
                     <Text
                       style={{

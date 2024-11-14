@@ -7,7 +7,6 @@ export default function ModalPersonalizado({
   onclose,
   titulo,
   mensajes,
-  accion
 }) {
   return (
     <Modal
@@ -51,7 +50,6 @@ export default function ModalPersonalizado({
             ))}
             <Pressable
               onPress={() => {
-                accion();
                 onclose();
               }}
               className=""

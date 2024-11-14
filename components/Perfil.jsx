@@ -2,6 +2,8 @@ import React from "react";
 import { ScrollView, Text, View, Image } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import imagenes from "../assets/images";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { LinearGradient } from "expo-linear-gradient";
 
 export function Perfil() {
   const insets = useSafeAreaInsets();
@@ -13,7 +15,7 @@ export function Perfil() {
       }}
       className="w-full h-full"
     >
-      <ScrollView className="w-full h-full">
+      <LinearGradient colors={["#82E5B5", "#334155"]} className="border-b-2 border-black">
         <View
           style={{
             maxWidth: "100%",
@@ -27,7 +29,7 @@ export function Perfil() {
           className="w-full h-full"
         >
           <View
-            className="bg-[#82E5B5]"
+            className=""
             style={{
               maxWidth: "100%",
               maxHeight: "100%",
@@ -46,9 +48,62 @@ export function Perfil() {
               backgroundColor: "#ffff",
               aspectRatio: 1,
               borderRadius: 9999,
-              resizeMode: "contain"
+              resizeMode: "contain",
             }}
           />
+        </View>
+      </LinearGradient>
+
+      <ScrollView
+        className=""
+        contentContainerStyle={{
+          flex: 1,
+          justifyContent: "center",
+        }}
+      >
+        <View className="flex items-center space-y-5">
+          <View
+            className="border-[#82E5B5] border-2 rounded-2xl flex-row justify-center items-center"
+            style={{ width: "80%" }}
+          >
+            <AntDesign name="user" size={24} color="black" />
+            <Text className="text-lg">Nombre:</Text>
+          </View>
+          <View
+            className="border-[#82E5B5] border-2 rounded-2xl flex-row justify-center items-center"
+            style={{ width: "80%" }}
+          >
+            <AntDesign name="user" size={24} color="black" />
+            <Text className="text-lg">Nombre:</Text>
+          </View>
+          <View
+            className="border-[#82E5B5] border-2 rounded-2xl flex-row justify-center items-center"
+            style={{ width: "80%" }}
+          >
+            <AntDesign name="user" size={24} color="black" />
+            <Text className="text-lg">Nombre:</Text>
+          </View>
+          <View
+            className="border-[#82E5B5] border-2 rounded-2xl flex-row justify-center items-center"
+            style={{ width: "80%" }}
+          >
+            <AntDesign name="user" size={24} color="black" />
+            <Text className="text-lg">Nombre:</Text>
+          </View>
+          <View
+            className="border-[#82E5B5] border-2 rounded-2xl flex-row justify-center items-center"
+            style={{ width: "80%" }}
+          >
+            <AntDesign name="user" size={24} color="black" />
+            <Text className="text-lg">Nombre:</Text>
+          </View>
+          <View
+            className="border-[#82E5B5] border-2 rounded-2xl flex-row justify-center items-center"
+            style={{ width: "80%" }}
+          >
+            <AntDesign name="user" size={24} color="black" />
+            <Text className="text-lg">Nombre:</Text>
+          </View>
         </View>
       </ScrollView>
     </View>

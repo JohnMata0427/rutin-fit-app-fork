@@ -15,22 +15,16 @@ import imagenes from "../assets/images.js";
 import { Shadow } from "react-native-shadow-2";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer.jsx";
-import axios from "axios";
 import ModalPersonalizado from "../layouts/Modal.jsx";
 import { useFocusEffect } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Icon from "react-native-vector-icons/Ionicons";
+import { useLoginViewModel } from "../models/LoginViewModel.js";
 
 export function Login({ navigation }) {
   const insets = useSafeAreaInsets();
 
-  const [loading, setLoading] = useState(false);
-
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const [mensajesBack, setMensajesBack] = useState([]);
-
-  const [loginExitoso, setLoginExitoso] = useState(false);
+  const { loading , modalVisible , setModalVisible , mensajesBack , handleLogin } = useLoginViewModel();
 
   const [ mostrarContraseña , setMostrarContraseña ] = useState(false);
 
@@ -43,9 +37,9 @@ export function Login({ navigation }) {
     password: "",
   });
 
-  const handleChange = (name, value) => {
-    setDatosLogin({ ...datosLogin, [name]: value });
-  };
+  // const handleChange = (name, value) => {
+  //   setDatosLogin({ ...datosLogin, [name]: value });
+  // };
 
   useFocusEffect(
     useCallback(() => {
@@ -56,38 +50,18 @@ export function Login({ navigation }) {
     }, [])
   );
 
-  const handleLogin = async () => {
-    setLoading(true);
-    try {
-      const respuesta = await axios.post(
-        `${process.env.EXPO_PUBLIC_BACKEND_LOCAL_URI}/login`,
-        datosLogin
-      );
-      console.log("Login exitoso", respuesta.data);
-      navigation.navigate("Datos");
-      setLoginExitoso(true);
-    } catch (error) {
-      if (error.response && error.response.data.errors) {
-        let mensajes = error.response.data.errors.map((error) => error.msg);
-        setMensajesBack(mensajes);
-      } else if (error.response) {
-        setMensajesBack([error.response.data.res]);
-      } else {
-        setMensajesBack(["Error desconocido"]);
-      }
-      setLoginExitoso(false);
-      setModalVisible(true);
-      console.log("Error al iniciar sesion ", error);
-    } finally {
-      setLoading(false);
+  const handleLoginPress = async () => {
+    const resultado = await handleLogin(datosLogin.email , datosLogin.password);
+    if(resultado.success){
+      navigation.navigate("Main");
     }
   };
 
-  const manejarLogin = () => {
-    if (loginExitoso) {
-    }
-    setModalVisible(false);
-  };
+  // const manejarLogin = () => {
+  //   if (loginExitoso) {
+  //   }
+  //   setModalVisible(false);
+  // };
 
   return (
     <View
@@ -131,7 +105,7 @@ export function Login({ navigation }) {
                     placeholder="Ingrese su usuario"
                     className="border-b-2"
                     value={datosLogin.email}
-                    onChangeText={(valor) => handleChange("email", valor)}
+                    onChangeText={(valor) => setDatosLogin({...datosLogin, email: valor})}
                   />
                   <Text>Contraseña:</Text>
                   <View className="flex-row">
@@ -140,7 +114,7 @@ export function Login({ navigation }) {
                       className="border-b-2 flex-1"
                       secureTextEntry={!mostrarContraseña}
                       value={datosLogin.password}
-                      onChangeText={(valor) => handleChange("password", valor)}
+                      onChangeText={(valor) => setDatosLogin({...datosLogin, password: valor})}
                     />
                     <TouchableOpacity onPress={manejarContraseñaVisible}
                     className=""
@@ -156,7 +130,7 @@ export function Login({ navigation }) {
                     padding: 10,
                     borderRadius: 5,
                   }}
-                  onPress={handleLogin}
+                  onPress={handleLoginPress}
                   disabled={loading}
                 >
                   {loading ? (
@@ -170,7 +144,6 @@ export function Login({ navigation }) {
                   onclose={() => setModalVisible(false)}
                   titulo="Mensaje del sistema"
                   mensajes={mensajesBack}
-                  accion={manejarLogin}
                 />
                 <View
                   className="flex-wrap flex-col gap-y-2 w-full"

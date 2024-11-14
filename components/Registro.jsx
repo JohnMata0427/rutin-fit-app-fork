@@ -1,7 +1,6 @@
 import {
   View,
   Image,
-  ScrollView,
   TextInput,
   Pressable,
   Text,
@@ -16,24 +15,20 @@ import imagenes from "../assets/images.js";
 import { Shadow } from "react-native-shadow-2";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer.jsx";
-import axios from "axios";
 import ModalPersonalizado from "../layouts/Modal.jsx";
-//import {EXPO_PUBLIC_BACKEND_LOCAL_URI} from "@env";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Icon from "react-native-vector-icons/Ionicons";
+import { RegisterViewModel } from "../models/RegistroViewModel.js";
+import ModalIngresoCodigo from "../layouts/ModalCodigo.jsx";
 
 export function Registro({ navigation }) {
   const insets = useSafeAreaInsets();
 
-  const [loading, setLoading] = useState(false);
-
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const [mensajesBack, setMensajesBack] = useState([]);
-
-  const [registroExitoso, setRegistroExitoso] = useState(false);
+  const { loading , modalVisible , mensajesBack , handleRegistro , setModalVisible} = RegisterViewModel();
 
   const [mostrarContraseña, setMostrarContraseña] = useState(false);
+
+  const [ modalCodigo , setModalCodigo ] = useState(false);
 
   const manejarContraseñaVisible = () => {
     setMostrarContraseña(!mostrarContraseña);
@@ -46,52 +41,11 @@ export function Registro({ navigation }) {
     password: "",
   });
 
-  const handleChange = (name, value) => {
-    setDatosRegistro({
-      ...datosRegistro,
-      [name]: value,
-    });
-  };
-
-  const handleRegister = async () => {
-    setLoading(true);
-    try {
-      const respuesta = await axios.post(
-        `${process.env.EXPO_PUBLIC_BACKEND_LOCAL_URI}/sign-up`,
-        datosRegistro
-      );
-      console.log("Registro exitoso", respuesta);
-      // Alert.alert("Registro Exitoso", "Ya puede iniciar sesión!", [
-      //   { text: "OK", onPress: () => navigation.navigate("Login") },
-      // ]);
-      setMensajesBack(["Registro Exitoso!"]);
-      setModalVisible(true);
-      setRegistroExitoso(true);
-    } catch (error) {
-      if (error.response && error.response.data.errors) {
-        let mensajes = error.response.data.errors.map((error) => error.msg);
-        mensajes = mensajes.filter((mensaje) => mensaje !== "Invalid value");
-        mensajes = [...new Set(mensajes)];
-        setMensajesBack(mensajes);
-      } else if (error.response) {
-        setMensajesBack([error.response.data.res]);
-      } else {
-        setMensajesBack(["Error desconocido"]);
-      }
-      setRegistroExitoso(false);
-      setModalVisible(true);
-      console.log("Error al registrar", error);
-      //Alert.alert("ERROR", "No se pudo registrar al usuario");
-    } finally {
-      setLoading(false);
+  const handleRegistroPress = async () => {
+    const resultado = await handleRegistro(datosRegistro.name , datosRegistro.lastname , datosRegistro.email , datosRegistro.password);
+    if (resultado.success){
+      setModalCodigo(true);
     }
-  };
-
-  const manejarRegistro = () => {
-    if (registroExitoso) {
-      navigation.navigate("Login");
-    }
-    setModalVisible(false);
   };
 
   return (
@@ -136,21 +90,21 @@ export function Registro({ navigation }) {
                     placeholder="Ingrese su Nombre"
                     className="border-b-2"
                     value={datosRegistro.name}
-                    onChangeText={(valor) => handleChange("name", valor)}
+                    onChangeText={(valor) => setDatosRegistro({...datosRegistro, name: valor})}
                   />
                   <Text className="">Apellido:</Text>
                   <TextInput
                     placeholder="Ingrese su Apellido"
                     className="border-b-2"
                     value={datosRegistro.lastname}
-                    onChangeText={(valor) => handleChange("lastname", valor)}
+                    onChangeText={(valor) => setDatosRegistro({...datosRegistro, lastname: valor})}
                   />
                   <Text className="">Correo:</Text>
                   <TextInput
                     placeholder="Ingrese su Correo"
                     className="border-b-2"
                     value={datosRegistro.email}
-                    onChangeText={(valor) => handleChange("email", valor)}
+                    onChangeText={(valor) => setDatosRegistro({...datosRegistro, email: valor})}
                     keyboardType="email-address"
                   />
                   <Text>Contraseña:</Text>
@@ -160,7 +114,7 @@ export function Registro({ navigation }) {
                       className="border-b-2 flex-1"
                       secureTextEntry={!mostrarContraseña}
                       value={datosRegistro.password}
-                      onChangeText={(valor) => handleChange("password", valor)}
+                      onChangeText={(valor) => setDatosRegistro({...datosRegistro, password: valor})}
                     />
                     <TouchableOpacity onPress={manejarContraseñaVisible}>
                       <Icon name={mostrarContraseña ? "eye-off" : "eye"} size={24} className="right-0" />
@@ -174,7 +128,7 @@ export function Registro({ navigation }) {
                     borderRadius: 5,
                     opacity: loading ? 0.5 : 1,
                   }}
-                  onPress={handleRegister}
+                  onPress={handleRegistroPress}
                   disabled={loading}
                 >
                   {loading ? (
@@ -188,7 +142,12 @@ export function Registro({ navigation }) {
                   onclose={() => setModalVisible(false)}
                   titulo="Mensaje del sistema"
                   mensajes={mensajesBack}
-                  accion={manejarRegistro}
+                />
+                <ModalIngresoCodigo
+                visible={modalCodigo}
+                onclose={() => setModalCodigo(false)}
+                correo={datosRegistro.email}
+                navigation={navigation}
                 />
                 <View
                   className="flex-wrap flex-col gap-y-2 w-full"

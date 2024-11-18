@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { login } from "../services/AuthService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export function useLoginViewModel() {
     const [loading, setLoading] = useState(false);
@@ -10,10 +11,21 @@ export function useLoginViewModel() {
   
     const [loginExitoso, setLoginExitoso] = useState(false);
 
+    const token = async ( token ) => {
+        try{
+            await AsyncStorage.setItem('@auth_token' , token);
+            console.log("Token guardado: ", token);
+            
+        } catch (error) {
+            console.log("Error setear el token en el storage" , error);
+        }
+    }
+
     const handleLogin = async (email , password) => {
         setLoading(true);
         try {
             const datos = await login(email, password);
+            await token(datos.token);
             setLoginExitoso(true);
             return { success: true , datos }
         } catch (error) {

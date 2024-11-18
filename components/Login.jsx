@@ -37,10 +37,6 @@ export function Login({ navigation }) {
     password: "",
   });
 
-  // const handleChange = (name, value) => {
-  //   setDatosLogin({ ...datosLogin, [name]: value });
-  // };
-
   useFocusEffect(
     useCallback(() => {
       setDatosLogin({
@@ -53,15 +49,9 @@ export function Login({ navigation }) {
   const handleLoginPress = async () => {
     const resultado = await handleLogin(datosLogin.email , datosLogin.password);
     if(resultado.success){
-      navigation.navigate("Main");
+      navigation.navigate("Datos");
     }
   };
-
-  // const manejarLogin = () => {
-  //   if (loginExitoso) {
-  //   }
-  //   setModalVisible(false);
-  // };
 
   return (
     <View
@@ -106,6 +96,7 @@ export function Login({ navigation }) {
                     className="border-b-2"
                     value={datosLogin.email}
                     onChangeText={(valor) => setDatosLogin({...datosLogin, email: valor})}
+                    autoCapitalize="none"
                   />
                   <Text>Contraseña:</Text>
                   <View className="flex-row">
@@ -124,7 +115,6 @@ export function Login({ navigation }) {
                   </View>
                 </View>
                 <Pressable
-                  //onPress={() => navigation.navigate("Datos")}
                   style={{
                     backgroundColor: "#82E5B5",
                     padding: 10,

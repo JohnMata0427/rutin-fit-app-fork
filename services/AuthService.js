@@ -24,9 +24,35 @@ export async function confirmarEmail(email, code) {
       code,
     }
   );
-  console.log(respuesta.data);
-  
   return respuesta.data;
-  
-  
+}
+
+export async function datosCliente(token, genre, weight, height, age, levelactivity, days, coach_id) {
+  const respuesta = await axios.put(
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL_URI}/client/configure-profile`,
+    {
+      genre,
+      weight,
+      height,
+      age,
+      levelactivity,
+      days,
+      coach_id
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return respuesta.data;
+}
+
+export async function entrenadores(token) {
+  const respuesta = await axios.get(`${process.env.EXPO_PUBLIC_BACKEND_LOCAL_URI}/coach/view-coaches`,{
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return respuesta.data;
 }

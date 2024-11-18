@@ -16,7 +16,6 @@ export function ConfirmEmailViewModel() {
         try {
             const datos = await confirmarEmail(email , code);
             console.log(datos);
-            
             setCodigoCorrecto(true);
             return { titulo: "Éxito" , mensaje: "Código de verificación correcto" };
         } catch (error) {
@@ -30,9 +29,9 @@ export function ConfirmEmailViewModel() {
             console.log("Error" , error);
             return { titulo: "Error" , mensaje: "Error al verificar el código" };
         } 
-        // finally {
-        //     setLoading(false);
-        // }
+        finally {
+            setLoading(false);
+        }
     }
 
     return {

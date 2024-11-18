@@ -17,15 +17,9 @@ export default function ModalIngresoCodigo({
 
   const verificarCodigo = async () => {
     const resultado = await handleCodigo(correo, codigo.code);
-    // if(resultado.success){
-    //     Alert.alert("Éxito", "Codigo verificado con éxito" , []);
-    //     navigation.navigator("Home")
-    // } else{
-    //     Alert.alert("Error", "Código no válido o expirado");
-    // }
     console.log(resultado);
     Alert.alert(resultado.titulo, resultado.mensaje);
-    if (resultado.titulo === "Éxito") navigation.navigate("Main");
+    if (resultado.titulo === "Éxito") navigation.navigate("Login");
   };
 
   return (
@@ -40,7 +34,6 @@ export default function ModalIngresoCodigo({
           <Text className="text-2xl text-center mb-2">
             Se envió un codigo de verificación a tu correo:
           </Text>
-          <Text className="bg-slate-300">{correo} </Text>
           <TextInput
             placeholder="Codigo de verificacion"
             keyboardType="numeric"

@@ -28,7 +28,7 @@ export async function confirmarEmail(email, code) {
 }
 
 export async function datosCliente(token, genre, weight, height, age, levelactivity, days, coach_id) {
-  const respuesta = await axios.put(
+  const respuesta = await axios.post(
     `${process.env.EXPO_PUBLIC_BACKEND_LOCAL_URI}/client/configure-profile`,
     {
       genre,
@@ -53,6 +53,22 @@ export async function entrenadores(token) {
     headers: {
       Authorization: `Bearer ${token}`
     }
+  })
+  return respuesta.data;
+}
+
+export async function perfil(token) {
+  const respuesta = await axios.get(`${process.env.EXPO_PUBLIC_BACKEND_LOCAL_URI}/client/view-profile`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return respuesta.data;
+}
+
+export default function olvidarContraseña(codigo){
+  const respuesta = axios.post(`${process.env.EXPO_PUBLIC_BACKEND_LOCAL_URI}/client/forget-password`, {
+    code: codigo
   })
   return respuesta.data;
 }

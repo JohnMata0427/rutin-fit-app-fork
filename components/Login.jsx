@@ -20,11 +20,14 @@ import { useFocusEffect } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useLoginViewModel } from "../models/LoginViewModel.js";
+import { PerfilViewModel } from "../models/PerfilVewModel.js";
 
 export function Login({ navigation }) {
   const insets = useSafeAreaInsets();
 
   const { loading , modalVisible , setModalVisible , mensajesBack , handleLogin } = useLoginViewModel();
+
+  const { handlePerfil } = PerfilViewModel();
 
   const [ mostrarContraseña , setMostrarContraseña ] = useState(false);
 
@@ -49,7 +52,12 @@ export function Login({ navigation }) {
   const handleLoginPress = async () => {
     const resultado = await handleLogin(datosLogin.email , datosLogin.password);
     if(resultado.success){
-      navigation.navigate("Datos");
+      const perfil =  await handlePerfil(resultado.datos.token)
+      if (perfil?.success){
+        navigation.navigate("Main")
+      } else {
+        navigation.navigate("Datos");
+      }
     }
   };
 
@@ -169,6 +177,7 @@ export function Login({ navigation }) {
                       )}
                     </Pressable>
                   </View>
+                  
                 </View>
               </View>
             </Shadow>

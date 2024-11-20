@@ -148,6 +148,7 @@ export function Registro({ navigation }) {
                 onclose={() => setModalCodigo(false)}
                 correo={datosRegistro.email}
                 navigation={navigation}
+                handleRegistro={handleRegistro}
                 />
                 <View
                   className="flex-wrap flex-col gap-y-2 w-full"

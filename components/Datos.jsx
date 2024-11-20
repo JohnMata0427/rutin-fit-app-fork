@@ -17,7 +17,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDatosViewModel } from "../models/DatosUsuarioModel";
 import { TouchableOpacity } from "react-native";
 import ModalEntrenadores from "../layouts/ModalEntrenadores";
-import { EntrenadoresViewModel } from "../models/EntrenadoresViewModel";
 
 export function Datos({ navigation }) {
   const insets = useSafeAreaInsets();
@@ -27,20 +26,28 @@ export function Datos({ navigation }) {
     modalVisible,
     setModalVisible,
     handleDatos,
-    datos,
-    setDatos,
   } = useDatosViewModel();
 
   ///const tokenUsuario = await AsyncStorage.getItem("token");
   const token = async () => {
     try {
       const obtenerToken = await AsyncStorage.getItem("@auth_token");
-      console.log(obtenerToken);
       setDatos({ ...datos, token: obtenerToken });
     } catch (error) {
       console.error("Error al obtener el token: ", error);
     }
   };
+
+  const [datos, setDatos] = useState({
+    genre: "",
+    age: "",
+    height: "",
+    weight: "",
+    levelactivity: "",
+    days: [],
+    token: "",
+    coach_id: "",
+  });
 
   const dias = [
     "lunes",
@@ -62,7 +69,6 @@ export function Datos({ navigation }) {
   };
 
   const validacionesDatos = () => {
-    console.log(datos);
     if (Object.values(datos).includes("") || datos.days.length === 0) {
       Alert.alert("Error", "Por favor, complete todos los campos");
       return false;
@@ -101,7 +107,6 @@ export function Datos({ navigation }) {
       datos.days,
       datos.coach_id
     ).then((resultado) => {
-      console.log(resultado);
       if (resultado.success) {
         navigation.navigate("Main");
       }
@@ -110,6 +115,7 @@ export function Datos({ navigation }) {
 
   useEffect(() => {
     token();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -240,11 +246,13 @@ export function Datos({ navigation }) {
             >
               <Text className="text-center"> Ver entrenadores </Text>
             </TouchableOpacity>
-            <Text> Entreandor seleccionado: {datos.coach_id} </Text>
+            <Text> Entreandor seleccionado: {datos.nombre_coach} </Text>
             <ModalEntrenadores
               visible={modalVisible}
               close={() => setModalVisible(false)}
               token={datos.token}
+              datos={datos}
+              setDatos={setDatos}
             />
           </View>
           <Pressable

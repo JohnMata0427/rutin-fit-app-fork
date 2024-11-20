@@ -5,7 +5,6 @@ export function EntrenadoresViewModel () {
 
     const [ loading , setLoading ] = useState(false);
     const [ modalVisible , setModalVisible ] = useState(false);
-    const [ entrenador , setEntrenador ] = useState({});
 
     const handleEntrenadores = async ( token ) => {
         setLoading(true);
@@ -24,8 +23,6 @@ export function EntrenadoresViewModel () {
         loading,
         modalVisible,
         handleEntrenadores,
-        setEntrenador,
-        entrenador
     }
 
 }

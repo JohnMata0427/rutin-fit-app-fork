@@ -8,6 +8,7 @@ export default function ModalIngresoCodigo({
   onclose,
   correo,
   navigation,
+  handleRegistro
 }) {
   const [codigo, setCodigo] = useState({
     code: "",
@@ -50,19 +51,6 @@ export default function ModalIngresoCodigo({
             }}
           >
             <Text className="text-center"> Verificar </Text>
-          </Pressable>
-          <Text className="italic text-center"> ¿No recibiste el código? </Text>
-          <Pressable
-            onPress={() => {
-              onclose();
-            }}
-            style={{
-              backgroundColor: "#82E5B5",
-              padding: 10,
-              borderRadius: 5,
-            }}
-          >
-            <Text className="text-center"> Reenviar código </Text>
           </Pressable>
         </View>
       </View>

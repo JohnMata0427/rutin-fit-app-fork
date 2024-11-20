@@ -6,17 +6,6 @@ export function useDatosViewModel() {
     const [ modalVisible , setModalVisible ] = useState(false);
     const [ envioDatos , setEnvioDatos ] = useState(false);
 
-    const [datos, setDatos] = useState({
-        genre: "",
-        age: "",
-        height: "",
-        weight: "",
-        levelactivity: "",
-        days: [],
-        token: "",
-        coach_id: "",
-      });
-
     const handleDatos = async ( token, genre, weight, height, age, levelactivity, days, coach_id ) => {
         setLoading(true);
         try {
@@ -37,8 +26,6 @@ export function useDatosViewModel() {
         setModalVisible,
         envioDatos,
         handleDatos,
-        datos,
-        setDatos
     }
 
 }

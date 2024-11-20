@@ -12,13 +12,11 @@ import {
 import { TouchableOpacity } from "react-native";
 import { useDatosViewModel } from "../models/DatosUsuarioModel.js";
 
-export default function ModalEntrenadores({ token, visible, close }) {
+export default function ModalEntrenadores({ token, visible, close, datos, setDatos }) {
   const {
     loading,
     handleEntrenadores,
   } = EntrenadoresViewModel();
-
-  const { datos , setDatos } = useDatosViewModel();
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [entrenadores, setEntrenadores] = useState([]);

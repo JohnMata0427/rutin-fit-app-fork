@@ -87,7 +87,7 @@ export default function ModalEntrenadores({ token, visible, close, datos, setDat
                   </View>
 
                   <TouchableOpacity
-                    onPress={() => handleElegirEntrenador(item.user_id._id , item.user_id.name)}
+                    onPress={() => handleElegirEntrenador(item._id , item.user_id.name)}
                     className="bg-[#82E5B5] rounded-md mt-3"
                   >
                     <Text className="text-center"> Seleccionar </Text>

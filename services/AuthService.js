@@ -66,9 +66,23 @@ export async function perfil(token) {
   return respuesta.data;
 }
 
-export default function olvidarContraseña(codigo){
-  const respuesta = axios.post(`${process.env.EXPO_PUBLIC_BACKEND_LOCAL_URI}/client/forget-password`, {
+export async function olvidarContraseña(codigo){
+  const respuesta = await axios.post(`${process.env.EXPO_PUBLIC_BACKEND_LOCAL_URI}/client/forget-password`, {
     code: codigo
   })
+  return respuesta.data;
+}
+
+export async function rutina(token){
+  const respuesta = await axios.get(`${process.env.EXPO_PUBLIC_BACKEND_LOCAL_URI}/client/view-routine`, {headers: {
+    Authorization: `Bearer ${token}`
+  }})
+  return respuesta.data;
+}
+
+export async function chat(token){
+  const respuesta = await axios.get(`${process.env.EXPO_PUBLIC_BACKEND_LOCAL_URI}/chat`, {headers: {
+    Authorization: `Bearer ${token}`
+  }})
   return respuesta.data;
 }

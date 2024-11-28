@@ -77,6 +77,8 @@ export async function rutina(token){
   const respuesta = await axios.get(`${process.env.EXPO_PUBLIC_BACKEND_LOCAL_URI}/client/view-routine`, {headers: {
     Authorization: `Bearer ${token}`
   }})
+  console.log(respuesta.data);
+  
   return respuesta.data;
 }
 

@@ -46,6 +46,7 @@ export function Chat() {
       setMensajes((state) => [...state, mensaje])
     );
     return () => {socket.disconnect()};
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   const enviarMensaje = () => {
@@ -83,7 +84,7 @@ export function Chat() {
       </LinearGradient>
 
       <KeyboardAwareFlatList
-        className="flex-1"
+        className="flex-1 bg-slate-200"
         data={mensajes}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
@@ -100,7 +101,7 @@ export function Chat() {
         enableOnAndroid={true}
       />
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => {
           setMensajes((prevMensajes) => [
             ...prevMensajes,
@@ -114,9 +115,9 @@ export function Chat() {
         }}
       >
         <Text style={{ color: "white" }}>Simular Mensaje</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
-      <View className="max-w-full flex-row h-12 items-center border-t-2">
+      <View className="max-w-full flex-row h-12 items-center border-t-2 bg-white">
         <TextInput
           className="border-r-2 h-full p-2"
           style={{ maxWidth: "75%", width: "75%" }}

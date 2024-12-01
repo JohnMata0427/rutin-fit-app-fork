@@ -1,65 +1,87 @@
 import React, { useEffect } from "react";
-import {
-  FlatList,
-  Text,
-  TextInput,
-  View,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
-  ImageBackground,
-} from "react-native";
+import { Text, TextInput, View, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
-import imagenes from "../assets/images";
 import { ChatViewModel } from "../models/ChatViewModel";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { io } from "socket.io-client";
 
-const socket = io(
-  `${process.env.EXPO_PUBLIC_BACKEND_LOCAL_URI}`.replace("/api/v1", "")
-);
+const socket = io(`${process.env.EXPO_PUBLIC_BACKEND}`.replace("/api/v1", ""));
+console.log(`${process.env.EXPO_PUBLIC_BACKEND}`.replace("/api/v1", ""));
 
 export function Chat() {
   const insets = useSafeAreaInsets();
 
   const [mensajes, setMensajes] = useState([]);
   const [mensajeNuevo, setMensajeNuevo] = useState("");
+  const [perfil, setPerfil] = useState({});
 
   const { handleChat } = ChatViewModel();
 
   const obtenerHistorial = async () => {
     try {
       const token = await AsyncStorage.getItem("@auth_token");
-      const respuesta = await handleChat(token);
+      const usuario = await AsyncStorage.getItem("@perfil");
+      const client_id = JSON.parse(usuario).client.client_id;
+      const coach_id = JSON.parse(usuario).client.coach_id;
+      const respuesta = await handleChat(token, client_id, coach_id);
       setMensajes(respuesta.datos);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
+    const datosPerfil = async () => {
+      try {
+        const usuario = await AsyncStorage.getItem("@perfil");
+        setPerfil(JSON.parse(usuario));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    datosPerfil();
+  }, []);
+
+  useEffect(() => {
     obtenerHistorial();
     socket.on("receive", (mensaje) =>
       setMensajes((state) => [...state, mensaje])
     );
-    return () => {socket.disconnect()};
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      socket.disconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   const enviarMensaje = () => {
     if (mensajeNuevo.trim() !== "") {
-      setMensajes([...mensajes, { text: mensajeNuevo, type: "enviado" }]);
+      setMensajes([
+        ...mensajes,
+        {
+          message: mensajeNuevo,
+          transmitter: perfil.client.client_id,
+          receiver: perfil.client.coach_id,
+          name: perfil.client.name,
+          rol: "cliente",
+          client_id: perfil.client.client_id,
+          coach_id: perfil.client.coach_id,
+        },
+      ]);
       setMensajeNuevo("");
       socket.emit("send", {
         message: mensajeNuevo,
-        trasnmitter: "",
-        name: ""
+        transmitter: perfil.client.client_id,
+        receiver: perfil.client.coach_id,
+        name: perfil.client.name,
+        rol: "cliente",
+        client_id: perfil.client.client_id,
+        coach_id: perfil.client.coach_id,
+        createdAt: Date.now(),
       });
     }
-
   };
 
   return (
@@ -89,37 +111,25 @@ export function Chat() {
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <View
-            className={`p-2 m-2 rounded-lg border max-w-[70%] ${item.type === "enviado" ? "bg-[#82E5B5] self-end" : "bg-white self-start"}`}
+            className={`${item.transmitter === perfil.client.client_id ? "self-end" : "self-start"}`}
           >
-            <Text
-              className={`text-base ${item.type === "enviado" ? "text-black" : "text-black"}`}
+            <Text className={`${item.transmitter === perfil.client.client_id ? "self-end pr-2" : "self-start pl-2"} font-bold`}>{item.name}</Text>
+            <View
+              className={`p-2 m-2 rounded-lg border max-w-[70%] ${item.transmitter === perfil.client.client_id ? "bg-[#82E5B5] self-end" : "bg-white self-start"}`}
             >
-              {item.text}
-            </Text>
+              <Text className={`text-base`}>{item.message}</Text>
+            </View>
+            <Text className={`${item.transmitter === perfil.client.client_id ? "self-end pr-2" : "self-start pl-2"} text-xs`}>{new Date(item.createdAt).toLocaleDateString() + "   " + new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
           </View>
         )}
         enableOnAndroid={true}
       />
 
-      {/* <TouchableOpacity
-        onPress={() => {
-          setMensajes((prevMensajes) => [
-            ...prevMensajes,
-            { text: "Mensaje de prueba recibido", type: "recibido" },
-          ]);
-        }}
-        style={{
-          backgroundColor: "#82E5B5",
-          padding: 10,
-          borderRadius: 5,
-        }}
-      >
-        <Text style={{ color: "white" }}>Simular Mensaje</Text>
-      </TouchableOpacity> */}
-
       <View className="max-w-full flex-row h-12 items-center border-t-2 bg-white">
         <TextInput
           className="border-r-2 h-full p-2"
+          multiline={true}
+          numberOfLines={40}
           style={{ maxWidth: "75%", width: "75%" }}
           value={mensajeNuevo}
           onChangeText={(text) => setMensajeNuevo(text)}

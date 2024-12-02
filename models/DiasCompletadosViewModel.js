@@ -8,7 +8,6 @@ export function DiasCompletadosViewModel() {
         setLoading(true)
         try{
             const datos = await obtenerDiasCompletados(token)
-            console.log(datos)
             return { success: true, datos }
         } catch (error) {
             console.log(error)

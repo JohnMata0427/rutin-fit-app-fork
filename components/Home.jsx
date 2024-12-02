@@ -24,7 +24,6 @@ export function Home() {
       const token = await AsyncStorage.getItem("@auth_token");
       if (token) {
         const respuesta = await handleDiasCompletados(token);
-        console.log(respuesta);
         setDiasCompletados(respuesta.datos.completedDays || []);
       } else {
         console.log("Error al conseguir el token");
@@ -90,9 +89,9 @@ export function Home() {
           </>
         )}
         ListEmptyComponent={
-          <View>
+          <View className="w-full h-full items-center p-10">
             <FontAwesome5 name="sad-tear" size={24} color="black" />
-            <Text>No hay días completados</Text>
+            <Text className="text-2xl">No hay días completados</Text>
           </View>
         }
       />

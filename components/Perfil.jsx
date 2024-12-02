@@ -8,13 +8,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TouchableOpacity } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import NetInfo from "@react-native-community/netinfo";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export function Perfil({ navigation }) {
   const insets = useSafeAreaInsets();
 
   const { handlePerfil } = PerfilViewModel();
   const [perfil, setPerfil] = useState({});
-  const [modalVisible, setModalVisible] = useState(false)
 
   const dias = [
     "lunes",
@@ -62,34 +62,34 @@ export function Perfil({ navigation }) {
     ]);
   };
 
-  useEffect(() => {
-    const obtenerDatosPerfil = async () => {
-      try {
-        const token = await AsyncStorage.getItem("@auth_token");
-        if (token) {
-          const { isConnected } = await NetInfo.fetch();
-          if (isConnected) {
-            const resultado = await handlePerfil(token);
-            setPerfil(resultado.datos)
-            guardarDatosLocalmente("@perfil", resultado.datos);
-          } else {
-            const datosLocales = await obtenerDatosLocales("@perfil");
-            if (datosLocales) {
-              setPerfil(datosLocales);
-            } else {
-              Alert.alert(
-                "Sin conexión",
-                "No tienes conexión a internet y no hay datos almacenador localmente"
-              );
-            }
-          }
+  const obtenerDatosPerfil = async () => {
+    try {
+      const token = await AsyncStorage.getItem("@auth_token");
+      if (token) {
+        const { isConnected } = await NetInfo.fetch();
+        if (isConnected) {
+          const resultado = await handlePerfil(token);
+          setPerfil(resultado.datos)
+          guardarDatosLocalmente("@perfil", resultado.datos);
         } else {
-          Alert.alert("Error", "No se encontró el token de autenticación");
+          const datosLocales = await obtenerDatosLocales("@perfil");
+          if (datosLocales) {
+            setPerfil(datosLocales);
+          } else {
+            Alert.alert(
+              "Sin conexión",
+              "No tienes conexión a internet y no hay datos almacenador localmente"
+            );
+          }
         }
-      } catch (error) {
-        console.log(error);
+      } else {
+        Alert.alert("Error", "No se encontró el token de autenticación");
       }
-    };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
 
     obtenerDatosPerfil();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -144,9 +144,14 @@ export function Perfil({ navigation }) {
           <View className="flex-row items-center justify-center space-y-3 space-x-5">
             <Text className="text-3xl font-bold text-center mt-4">Perfil</Text>
             <TouchableOpacity
-            onPress={() => navigation.navigate("UpdateProfile")}       
+            onPress={() => navigation.navigate("UpdateProfile", {perfil})}       
             >
               <AntDesign name="edit" size={30} color="black" />
+            </TouchableOpacity>
+            <TouchableOpacity
+            onPress={obtenerDatosPerfil}
+            >
+            <Ionicons name="reload" size={24} color="black" />
             </TouchableOpacity>
           </View>
           <View className="flex-col" style={{ width: "80%" }}>

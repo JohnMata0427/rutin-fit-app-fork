@@ -74,10 +74,10 @@ export function Datos({ navigation }) {
       return false;
     }
     if (
-      Object.values(datos.age && datos.height && datos.weight).includes(".") ||
-      Object.values(datos.age && datos.height && datos.weight).includes(",") ||
-      Object.values(datos.age && datos.height && datos.weight).includes("-") ||
-      Object.values(datos.age && datos.height && datos.weight).includes("+")
+      Object.values(datos.age || datos.height || datos.weight).includes(".") ||
+      Object.values(datos.age || datos.height || datos.weight).includes(",") ||
+      Object.values(datos.age || datos.height || datos.weight).includes("-") ||
+      Object.values(datos.age || datos.height || datos.weight).includes("+")
     ) {
       Alert.alert("Error", "No se permiten caracteres especiales");
       return false;

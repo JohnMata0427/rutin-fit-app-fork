@@ -118,7 +118,7 @@ export async function chat(token, client_id, coach_id) {
 
 export async function marcarDia(token, day) {
   const respuesta = await axios.post(
-    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/client/mark-day-completed`,
+    `${process.env.EXPO_PUBLIC_BACKEND}/client/mark-day-completed`,
     { day },
     {
       headers: {
@@ -131,7 +131,7 @@ export async function marcarDia(token, day) {
 
 export async function obtenerDiasCompletados(token) {
   const respuesta = await axios.get(
-    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/client/view-completed-days`,
+    `${process.env.EXPO_PUBLIC_BACKEND}/client/view-completed-days`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
   return respuesta.data;
@@ -141,6 +141,7 @@ export async function actualizarPerfil(
   token,
   name,
   lastname,
+  email,
   genre,
   weight,
   height,
@@ -149,13 +150,24 @@ export async function actualizarPerfil(
   days
 ) {
   const respuesta = await axios.put(
-    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/client/update-profile`,
-    { name, lastname, genre, weight, height, age, levelactivity, days },
+    `${process.env.EXPO_PUBLIC_BACKEND}/client/update-profile`,
+    { name, lastname, email, genre, weight, height, age, levelactivity, days },
     {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }
   );
+  return respuesta.data;
+}
+
+export async function restaurarContraseña(email) {
+  console.log(`${process.env.EXPO_PUBLIC_BACKEND}/client/restore-password`);
+  const respuesta = await axios.post(`${process.env.EXPO_PUBLIC_BACKEND}/client/restore-password`, {email});
+  return respuesta.data;
+}
+
+export async function cambiarContraseña(email, password, confirmPassword) {
+  const respuesta = await axios.put(`${process.env.EXPO_PUBLIC_BACKEND}/client/new-password`, {email, password, confirmPassword});
   return respuesta.data;
 }

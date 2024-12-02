@@ -5,16 +5,34 @@ import {
   TextInput,
   Pressable,
   Text,
+  Alert
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import React from "react";
+import React , { useState } from "react";
 import imagenes from "../assets/images.js";
 import { Shadow } from "react-native-shadow-2";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer.jsx";
+import { restaurarContraseña } from "../services/AuthService.js";
 
 export function OlvidarPassword({ navigation }) {
   const insets = useSafeAreaInsets();
+
+  const [email, setEmail] = useState("");
+
+  const enviarCorreo = async () => {
+    try {
+      console.log(email);
+      const datos = await restaurarContraseña(email)
+      if (datos) {
+        Alert.alert("Éxito", "Verifica tu correo electrónico para restablecer tu contraseña");
+        navigation.navigate("CodigoPassword", { email });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <View
       style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
@@ -44,7 +62,7 @@ export function OlvidarPassword({ navigation }) {
               className="min-w-[50px] min-h-[50px] h-28 w-28"
               style={{ resizeMode: "contain" }}
             />
-            <Text className="font-extrabold text-4xl text-center">
+            <Text className="font-extrabold text-2xl text-center">
               Recuperar Contraseña
             </Text>
             <View style={{ maxWidth: "80%" }} className="w-full gap-y-3">
@@ -52,6 +70,8 @@ export function OlvidarPassword({ navigation }) {
               <TextInput
                 placeholder="Ingrese su correo"
                 className="border-b-2"
+                value={email}
+                onChangeText={(text) => setEmail(text)}
               />
             </View>
             <View className="flex-row w-full justify-evenly">
@@ -61,6 +81,7 @@ export function OlvidarPassword({ navigation }) {
                   padding: 10,
                   borderRadius: 5,
                 }}
+                onPress={enviarCorreo}
               >
                 <Text className="">Enviar</Text>
               </Pressable>

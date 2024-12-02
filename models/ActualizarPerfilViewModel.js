@@ -1,12 +1,17 @@
-import React from "react";
-import { useState } from "react";
 import { actualizarPerfil } from "../services/AuthService";
+import { useState } from "react";
 
 export function ActualizarPerfilViewModel() {
+
+  const [ mensajesBack , setMensajesBack ] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+
+
   const handleUpdateProfile = async (
     token,
     name,
     lastname,
+    email,
     genre,
     weight,
     height,
@@ -19,6 +24,7 @@ export function ActualizarPerfilViewModel() {
         token,
         name,
         lastname,
+        email,
         genre,
         weight,
         height,
@@ -28,9 +34,15 @@ export function ActualizarPerfilViewModel() {
       );
       return { success: true, datos };
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.data.res) {
+        setMensajesBack([error.response.data.res]);
+        
+      } else {
+        setMensajesBack(["Error desconocido"])
+      }
+      setModalVisible(true)
       return { success: false, error };
     }
   };
-  return { handleUpdateProfile };
+  return { handleUpdateProfile , mensajesBack , modalVisible, setModalVisible , setMensajesBack};
 }

@@ -11,6 +11,8 @@ import TabNavigator from "./TabNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ActivityIndicator, Text, View } from "react-native";
 import { UpdateProfileScreen } from "./components/ActualizarPerfil"
+import { CodigoPassword } from "./components/CodigoPassword";
+import { NuevaContraseña } from "./components/NuevaContraseña";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -55,6 +57,8 @@ export default function App() {
           <Stack.Screen name="Datos" component={Datos} />
           <Stack.Screen name="Main" component={TabNavigator} />
           <Stack.Screen name="UpdateProfile" component={UpdateProfileScreen} />
+          <Stack.Screen name="CodigoPassword" component={CodigoPassword} />
+          <Stack.Screen name="NuevaContraseña" component={NuevaContraseña} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

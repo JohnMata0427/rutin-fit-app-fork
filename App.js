@@ -13,17 +13,38 @@ import { ActivityIndicator, Text, View } from "react-native";
 import { UpdateProfileScreen } from "./components/ActualizarPerfil"
 import { CodigoPassword } from "./components/CodigoPassword";
 import { NuevaContraseña } from "./components/NuevaContraseña";
+import * as Notifications from 'expo-notifications';
+import { tokenNotification } from "./services/AuthService";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [logeado, setLogeado] = useState(null);
   const [inicializacion, setInicializacion] = useState(true);
+
+  const verificarTokenNotificacion = async ( authToken) => {
+    try {
+      const { status } = await Notifications.getPermissionsAsync();
+      if (status !== 'granted') {
+        console.log("No se otorgaron permisos de notificaciones");
+        return;
+      }
+      const tokenNotificacion = ( await Notifications.getExpoPushTokenAsync()).data;
+      console.log("Token de notificación: ", tokenNotificacion);
+      await tokenNotification(authToken ,tokenNotificacion); 
+    } catch (error) {
+      console.log("Error al obtener token de notificación: ", error);
+    }
+  }
+
   useEffect(() => {
     const verificarLogin = async () => {
       try {
         const token = await AsyncStorage.getItem("@auth-token");
         console.log("Token encontrado: ",token);
         setLogeado(!!token);
+        if (token) {
+          await verificarTokenNotificacion(token);
+        }
       } catch (error) {
         console.log("Token inexistente o invalido: ", error);
         setLogeado(false);

@@ -10,6 +10,8 @@ export function EntrenadoresViewModel () {
         setLoading(true);
         try {
             const datos = await entrenadores(token)
+            console.log("entrenadores", datos);
+            
             setModalVisible(true);
             return { success: true , datos }
         } catch (error) {

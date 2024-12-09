@@ -21,6 +21,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Icon from "react-native-vector-icons/Ionicons";
 import { useLoginViewModel } from "../models/LoginViewModel.js";
 import { PerfilViewModel } from "../models/PerfilVewModel.js";
+import { registrarToken } from "../notifications.js";
 
 export function Login({ navigation }) {
   const insets = useSafeAreaInsets();
@@ -52,6 +53,7 @@ export function Login({ navigation }) {
   const handleLoginPress = async () => {
     const resultado = await handleLogin(datosLogin.email , datosLogin.password);
     if(resultado.success){
+      await registrarToken(resultado.datos.token)
       const perfil =  await handlePerfil(resultado.datos.token)
       if (perfil?.success){
         navigation.navigate("Main")

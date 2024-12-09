@@ -15,7 +15,7 @@ const Footer = () => {
           <Text className="text-white text-center"> ¿Quienes somos?</Text>
           <Text className="text-white text-center"> Contáctanos: </Text>
           <Pressable
-            onPress={() => Linking.openURL("mailto:dustin04ms@gmail.com")}
+            onPress={() => Linking.openURL("mailto:rutinfit24@gmail.com")}
             style={({ pressed }) => ({
               backgroundColor: pressed ? "white" : "transparent",
               borderColor: "white",
@@ -31,7 +31,7 @@ const Footer = () => {
                   textAlign: "center",
                 }}
               >
-                dustin04ms@gmail.com
+                rutinfit24@gmail.com
               </Text>
             )}
           </Pressable>

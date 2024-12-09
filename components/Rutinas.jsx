@@ -42,6 +42,8 @@ export function Rutinas() {
     const marcar = await handleMarcarDia(token, day);
     if (marcar.success) {
       Alert.alert("Éxito", "Felicidades por competar un día de entrenamiento");
+    } else {
+      Alert.alert("Error", "El dia que intentas marcar no coincide con el dia de entrenamiento actual");
     }
   };
 
@@ -200,10 +202,10 @@ export function Rutinas() {
                   )}
                 </List.Accordion>
               ))}
-          </View>
-          <View className="p-3 border space-x-3 rounded-md">
-            <Text className="w-full font-bold text-base">Comentarios:</Text>
-            <Text className="flex-1 text-justify">{rutina.comments}</Text>
+            <View className="p-3 border space-x-3 rounded-md">
+              <Text className="w-full font-bold text-base">Comentarios:</Text>
+              <Text className="flex-1 text-justify">{rutina.comments}</Text>
+            </View>
           </View>
           <View className="flex-row p-3 border space-x-3 rounded-md items-center">
             <Text className="font-bold text-base">Fecha de inicio:</Text>

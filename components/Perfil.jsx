@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, Text, View, Image, Alert } from "react-native";
+import { ScrollView, Text, View, Image, Alert, Switch } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import imagenes from "../assets/images";
 import { LinearGradient } from "expo-linear-gradient";
@@ -9,12 +9,38 @@ import { TouchableOpacity } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import NetInfo from "@react-native-community/netinfo";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import * as Notifications from "expo-notifications"
 
 export function Perfil({ navigation }) {
   const insets = useSafeAreaInsets();
 
   const { handlePerfil } = PerfilViewModel();
   const [perfil, setPerfil] = useState({});
+  const [ notificaciones , setNotificaciones ] = useState(false);
+
+  useEffect(() => {
+    const verificarEstadoPermisos = async () => {
+      const { status } = await Notifications.getPermissionsAsync();
+      setNotificaciones( status === 'granted' );
+    }
+    verificarEstadoPermisos();
+  }, []);
+
+  const handleNotificaciones = async ( valor ) => {
+    if ( valor ) {
+      const { status } = await Notifications.getPermissionsAsync();
+      if ( status === 'granted' ) {
+        setNotificaciones(true);
+        Alert.alert("Éxito", "Se han habilitado las notificaciones");
+      } else {
+        setNotificaciones(false);
+        Alert.alert("Error", "Por favor habilita las notificaciones");
+      }
+    } else {
+      setNotificaciones(false);
+      Alert.alert("Notificaciones desactivadas", "Ya no recibiras notificaciones");
+    }
+  }
 
   const dias = [
     "lunes",
@@ -153,6 +179,8 @@ export function Perfil({ navigation }) {
             >
             <Ionicons name="reload" size={24} color="black" />
             </TouchableOpacity>
+            <Text className="font-bold" >Notificaciones: </Text>
+            <Switch value={notificaciones} onValueChange={handleNotificaciones} />
           </View>
           <View className="flex-col" style={{ width: "80%" }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">

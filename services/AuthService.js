@@ -163,11 +163,26 @@ export async function actualizarPerfil(
 
 export async function restaurarContraseña(email) {
   console.log(`${process.env.EXPO_PUBLIC_BACKEND}/client/restore-password`);
-  const respuesta = await axios.post(`${process.env.EXPO_PUBLIC_BACKEND}/client/restore-password`, {email});
+  const respuesta = await axios.post(
+    `${process.env.EXPO_PUBLIC_BACKEND}/client/restore-password`,
+    { email }
+  );
   return respuesta.data;
 }
 
 export async function cambiarContraseña(email, password, confirmPassword) {
-  const respuesta = await axios.put(`${process.env.EXPO_PUBLIC_BACKEND}/client/new-password`, {email, password, confirmPassword});
+  const respuesta = await axios.put(
+    `${process.env.EXPO_PUBLIC_BACKEND}/client/new-password`,
+    { email, password, confirmPassword }
+  );
+  return respuesta.data;
+}
+
+export async function tokenNotification(token, tokenN) {
+  const respuesta = await axios.post(
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/save-notification-token`,
+    { tokenN },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
   return respuesta.data;
 }

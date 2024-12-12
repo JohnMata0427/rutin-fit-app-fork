@@ -22,6 +22,13 @@
     },
     "web": {
       "favicon": "./assets/loginIcon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "03274512-1280-4504-af8d-9c1963fb84e6"
+      }
+    },
+    "owner": "joelms",
+    "sdkVersion":"51.0.28"
   }
 }

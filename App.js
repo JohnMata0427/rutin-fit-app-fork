@@ -69,7 +69,7 @@ export default function App() {
       <NavigationContainer>
         <StatusBar style="auto" />
         <Stack.Navigator
-          initialRouteName={logeado ? "Main" : "Main"}
+          initialRouteName={logeado ? "Main" : "Login"}
           screenOptions={{ headerShown: false }}
         >
           <Stack.Screen name="Login" component={Login} />

@@ -4,6 +4,7 @@ import { tokenNotification } from "./services/AuthService";
 
 export const registrarToken = async (token) => {
     try {
+        
         const { status: existingStatus } = await Notificatios.getPermissionsAsync();
         let finalStatus = existingStatus;
         if (existingStatus !== 'granted') {
@@ -17,7 +18,6 @@ export const registrarToken = async (token) => {
         }
 
         const tokenN = (await Notificatios.getExpoPushTokenAsync()).data;
-        console.log("tokenN: ", tokenN);
          
 
         await tokenNotification(token, tokenN);

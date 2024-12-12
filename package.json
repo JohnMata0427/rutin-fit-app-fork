@@ -39,7 +39,8 @@
     "react-native-vector-icons": "^10.2.0",
     "react-native-web": "~0.19.10",
     "socket.io-client": "^4.8.1",
-    "expo-notifications": "~0.28.19"
+    "expo-notifications": "~0.28.19",
+    "expo-updates": "~0.25.27"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -162,7 +162,6 @@ export async function actualizarPerfil(
 }
 
 export async function restaurarContraseña(email) {
-  console.log(`${process.env.EXPO_PUBLIC_BACKEND}/client/restore-password`);
   const respuesta = await axios.post(
     `${process.env.EXPO_PUBLIC_BACKEND}/client/restore-password`,
     { email }
@@ -179,9 +178,12 @@ export async function cambiarContraseña(email, password, confirmPassword) {
 }
 
 export async function tokenNotification(token, tokenN) {
+  console.log("token de RegistrarToken: ",token);
+  console.log("Token Not: ", tokenN);
+  
   const respuesta = await axios.post(
     `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/save-notification-token`,
-    { tokenN },
+    { token: tokenN },
     { headers: { Authorization: `Bearer ${token}` } }
   );
   return respuesta.data;

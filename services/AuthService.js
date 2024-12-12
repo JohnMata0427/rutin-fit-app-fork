@@ -182,7 +182,7 @@ export async function tokenNotification(token, tokenN) {
   console.log("Token Not: ", tokenN);
   
   const respuesta = await axios.post(
-    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/save-notification-token`,
+    `${process.env.EXPO_PUBLIC_BACKEND}/save-notification-token`,
     { token: tokenN },
     { headers: { Authorization: `Bearer ${token}` } }
   );

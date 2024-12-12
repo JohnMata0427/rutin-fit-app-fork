@@ -68,50 +68,71 @@ export function Datos({ navigation }) {
     });
   };
 
-  const validacionesDatos = () => {
-    if (Object.values(datos).includes("") || datos.days.length === 0) {
-      Alert.alert("Error", "Por favor, complete todos los campos");
-      return false;
-    }
-    if (
-      Object.values(datos.age || datos.height || datos.weight).includes(".") ||
-      Object.values(datos.age || datos.height || datos.weight).includes(",") ||
-      Object.values(datos.age || datos.height || datos.weight).includes("-") ||
-      Object.values(datos.age || datos.height || datos.weight).includes("+")
-    ) {
-      Alert.alert("Error", "No se permiten caracteres especiales");
-      return false;
-    } else if (datos.age < 3 || datos.age > 100) {
-      Alert.alert("Error", "La edad debe ser entre 3 y 100 años");
-      return false;
-    } else if (datos.height < 30 || datos.height > 250) {
-      Alert.alert(
-        "Error",
-        "La altura ingresada es poco realista o no es un número"
-      );
-      return false;
-    } else if (datos.weight < 10 || datos.weight > 500) {
-      Alert.alert(
-        "Error",
-        "El peso ingresado es poco realista o no es un número"
-      );
-      return false;
-    }
-    handleDatos(
-      datos.token,
-      datos.genre,
-      datos.weight,
-      datos.height,
-      datos.age,
-      datos.levelactivity,
-      datos.days,
-      datos.coach_id
-    ).then((resultado) => {
-      if (resultado.success) {
-        navigation.navigate("Main");
-      }
-    });
+// ... otras importaciones y código
+
+const diasOrdenados = [
+  "lunes",
+  "martes",
+  "miercoles",
+  "jueves",
+  "viernes",
+  "sabado",
+  "domingo",
+];
+
+const validacionesDatos = () => {
+  if (Object.values(datos).includes("") || datos.days.length === 0) {
+    Alert.alert("Error", "Por favor, complete todos los campos");
+    return false;
+  }
+  if (
+    Object.values(datos.age || datos.height || datos.weight).includes(".") ||
+    Object.values(datos.age || datos.height || datos.weight).includes(",") ||
+    Object.values(datos.age || datos.height || datos.weight).includes("-") ||
+    Object.values(datos.age || datos.height || datos.weight).includes("+")
+  ) {
+    Alert.alert("Error", "No se permiten caracteres especiales");
+    return false;
+  } else if (datos.age < 3 || datos.age > 100) {
+    Alert.alert("Error", "La edad debe ser entre 3 y 100 años");
+    return false;
+  } else if (datos.height < 30 || datos.height > 250) {
+    Alert.alert(
+      "Error",
+      "La altura ingresada es poco realista o no es un número"
+    );
+    return false;
+  } else if (datos.weight < 10 || datos.weight > 500) {
+    Alert.alert(
+      "Error",
+      "El peso ingresado es poco realista o no es un número"
+    );
+    return false;
+  }
+
+  const datosOrdenados = {
+    ...datos,
+    days: datos.days.sort((a, b) => diasOrdenados.indexOf(a) - diasOrdenados.indexOf(b)),
   };
+
+  handleDatos(
+    datosOrdenados.token,
+    datosOrdenados.genre,
+    datosOrdenados.weight,
+    datosOrdenados.height,
+    datosOrdenados.age,
+    datosOrdenados.levelactivity,
+    datosOrdenados.days,
+    datosOrdenados.coach_id
+  ).then((resultado) => {
+    if (resultado.success) {
+      navigation.navigate("Main");
+    }
+  });
+};
+
+// ... resto del código
+
 
   useEffect(() => {
     token();

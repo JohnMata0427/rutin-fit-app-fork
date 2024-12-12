@@ -21,7 +21,7 @@ export default function App() {
   const [logeado, setLogeado] = useState(null);
   const [inicializacion, setInicializacion] = useState(true);
 
-  const verificarTokenNotificacion = async ( authToken) => {
+  const verificarTokenNotificacion = async (authToken) => {
     try {
       const { status } = await Notifications.getPermissionsAsync();
       if (status !== 'granted') {

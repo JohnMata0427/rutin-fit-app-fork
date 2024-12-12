@@ -12,13 +12,15 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.joelms.RutinFit"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/loginIcon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.joelms.RutinFit"
     },
     "web": {
       "favicon": "./assets/loginIcon.png"
@@ -29,6 +31,6 @@
       }
     },
     "owner": "joelms",
-    "sdkVersion":"51.0.28"
+    "sdkVersion": "51.0.28"
   }
 }

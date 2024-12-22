@@ -22,7 +22,6 @@ export function OlvidarPassword({ navigation }) {
 
   const enviarCorreo = async () => {
     try {
-      console.log(email);
       const datos = await restaurarContraseña(email)
       if (datos) {
         Alert.alert("Éxito", "Verifica tu correo electrónico para restablecer tu contraseña");

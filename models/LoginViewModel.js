@@ -14,7 +14,6 @@ export function useLoginViewModel() {
     const token = async ( token ) => {
         try{
             await AsyncStorage.setItem('@auth_token' , token);
-            console.log("Token guardado: ", token);
             
         } catch (error) {
             console.log("Error setear el token en el storage" , error);

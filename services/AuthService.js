@@ -59,7 +59,7 @@ export async function datosCliente(
 
 export async function entrenadores(token) {
   const respuesta = await axios.get(
-    `${process.env.EXPO_PUBLIC_BACKEND}/coach/view-coaches`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/coach/view-coaches`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -71,7 +71,7 @@ export async function entrenadores(token) {
 
 export async function perfil(token) {
   const respuesta = await axios.get(
-    `${process.env.EXPO_PUBLIC_BACKEND}/client/view-profile`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/client/view-profile`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -106,7 +106,7 @@ export async function rutina(token) {
 
 export async function chat(token, client_id, coach_id) {
   const respuesta = await axios.get(
-    `${process.env.EXPO_PUBLIC_BACKEND}/chats/${client_id}/${coach_id}`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/chats/${client_id}/${coach_id}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -178,8 +178,6 @@ export async function cambiarContraseña(email, password, confirmPassword) {
 }
 
 export async function tokenNotification(token, tokenN) {
-  console.log("token de RegistrarToken: ",token);
-  console.log("Token Not: ", tokenN);
   
   const respuesta = await axios.post(
     `${process.env.EXPO_PUBLIC_BACKEND}/save-notification-token`,

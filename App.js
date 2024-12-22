@@ -29,7 +29,6 @@ export default function App() {
         return;
       }
       const tokenNotificacion = ( await Notifications.getExpoPushTokenAsync()).data;
-      console.log("Token de notificación: ", tokenNotificacion);
       await tokenNotification(authToken ,tokenNotificacion); 
     } catch (error) {
       console.log("Error al obtener token de notificación: ", error);
@@ -39,8 +38,7 @@ export default function App() {
   useEffect(() => {
     const verificarLogin = async () => {
       try {
-        const token = await AsyncStorage.getItem("@auth-token");
-        console.log("Token encontrado: ",token);
+        const token = await AsyncStorage.getItem("@auth_token");
         setLogeado(!!token);
         if (token) {
           await verificarTokenNotificacion(token);

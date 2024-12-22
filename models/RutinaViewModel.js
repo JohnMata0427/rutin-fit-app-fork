@@ -11,7 +11,6 @@ export function RutinaViewModel(){
             const datos = await rutina(token);
             return { success: true , datos };
         } catch (error) {
-            console.log(error.response.data.res);
             return { success: false , error };
         } finally {
             setLoadingRutina(false);

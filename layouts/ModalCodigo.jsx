@@ -18,7 +18,6 @@ export default function ModalIngresoCodigo({
 
   const verificarCodigo = async () => {
     const resultado = await handleCodigo(correo, codigo.code);
-    console.log(resultado);
     Alert.alert(resultado.titulo, resultado.mensaje);
     if (resultado.titulo === "Éxito") navigation.navigate("Login");
   };

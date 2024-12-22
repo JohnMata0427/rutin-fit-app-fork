@@ -6,6 +6,7 @@ import {
     Pressable,
     Text,
     Alert,
+    TouchableOpacity,
   } from "react-native";
   import { useSafeAreaInsets } from "react-native-safe-area-context";
   import React, { useState } from "react";
@@ -27,23 +28,27 @@ import {
 
     const updatePassword = async () => {
         try {
-            console.log(email);
-            console.log(contraseña.password);
-            console.log(contraseña.confirmPassword);
-            
+          // Validar que las contraseñas sean iguales, mayor a 8 un caracter especial y un numero
+          if (contraseña.password !== contraseña.confirmPassword) {
+            Alert.alert("Error", "Las contraseñas deben ser iguales");
+          } else if (contraseña.password.length < 8) {
+            Alert.alert("Error", "La contraseña debe tener al menos 8 caracteres");
+          } else if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(contraseña.password)) {
+            Alert.alert("Error", "La contraseña debe tener al menos un caracter especial");
+          } else if (!/[0-9]/.test(contraseña.password)) {  
+            Alert.alert("Error", "La contraseña debe tener al menos un número");
+          } else {
             const datos = await cambiarContraseña(email, contraseña.password, contraseña.confirmPassword);
-            console.log(datos)
             if (datos) {
                 navigation.navigate('Login')
             } else {
                 Alert.alert("Error" , "No se pudo cambiar la contraseña")
             }
+          }
         } catch (error) {
             console.log(error)
         }
     }
-  
-  
     return (
       <View
         style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
@@ -95,7 +100,7 @@ import {
                 />
               </View>
               <View className="flex-row w-full justify-evenly">
-                <Pressable
+                <TouchableOpacity
                   style={{
                     backgroundColor: "#82E5B5",
                     padding: 10,
@@ -104,8 +109,8 @@ import {
                   onPress={updatePassword}
                 >
                   <Text className="">Enviar</Text>
-                </Pressable>
-                <Pressable
+                </TouchableOpacity>
+                <TouchableOpacity
                   onPress={() => navigation.navigate("Login")}
                   style={{
                     backgroundColor: "#82E5B5",
@@ -114,7 +119,7 @@ import {
                   }}
                 >
                   <Text className="">Cancelar</Text>
-                </Pressable>
+                </TouchableOpacity>
               </View>
             </View>
           </Shadow>

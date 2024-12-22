@@ -100,7 +100,7 @@ export function Perfil({ navigation }) {
         } else {
           const datosLocales = await obtenerDatosLocales("@perfil");
           if (datosLocales) {
-            setPerfil(datosLocales);
+            setPerfil(JSON.parse(datosLocales));
           } else {
             Alert.alert(
               "Sin conexión",
@@ -188,7 +188,7 @@ export function Perfil({ navigation }) {
               <Text className="text-sm">Nombre: </Text>
             </View>
             <View className="border-b-[#82E5B5] border-b-2 rounded-2xl flex-col justify-center items-center w-full">
-              <Text className="text-lg">{perfil?.client?.name}</Text>
+              <Text className="text-lg">{perfil?.client?.user_id?.name}</Text>
             </View>
           </View>
           <View className="flex-col" style={{ width: "80%" }}>
@@ -197,7 +197,7 @@ export function Perfil({ navigation }) {
               <Text className="text-sm">Apellido: </Text>
             </View>
             <View className="border-b-[#82E5B5] border-b-2 rounded-2xl flex-col justify-center items-center w-full">
-              <Text className="text-lg">{perfil?.client?.lastname}</Text>
+              <Text className="text-lg">{perfil?.client?.user_id?.lastname}</Text>
             </View>
           </View>
           <View className="flex-col" style={{ width: "80%" }}>
@@ -206,7 +206,7 @@ export function Perfil({ navigation }) {
               <Text className="text-sm">Correo: </Text>
             </View>
             <View className="border-b-[#82E5B5] border-b-2 rounded-2xl flex-col justify-center items-center w-full">
-              <Text className="text-lg">{perfil?.client?.email}</Text>
+              <Text className="text-lg">{perfil?.client?.user_id?.email}</Text>
             </View>
           </View>
           <View className="flex-col" style={{ width: "80%" }}>

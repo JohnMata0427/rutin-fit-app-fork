@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   View,
-  Button,
   ScrollView,
   Alert,
   Image,
@@ -23,9 +22,9 @@ export function UpdateProfileScreen({ navigation, route }) {
   const { handleUpdateProfile , mensajesBack , modalVisible, setModalVisible} = ActualizarPerfilViewModel();
   const { perfil } = route.params;
   const [datos, setDatos] = useState({
-    name: perfil.client?.name || "",
-    lastname: perfil?.client?.lastname || "",
-    email: perfil?.client?.email || "",
+    name: perfil.client?.user_id?.name || "",
+    lastname: perfil?.client?.user_id?.lastname || "",
+    email: perfil?.client?.user_id?.email || "",
     genre: perfil?.client?.genre || "",
     weight: perfil?.client?.weight?.toString() || "",
     height: perfil?.client?.height?.toString() || "",
@@ -38,7 +37,6 @@ export function UpdateProfileScreen({ navigation, route }) {
 
   const obtenerToken = async () => {
     const token = await AsyncStorage.getItem("@auth_token");
-    console.log(token);
     if (token) {
       setToken(token);
     } else {

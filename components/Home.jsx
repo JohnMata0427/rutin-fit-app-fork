@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import React, { useEffect } from "react"; 
+import { ActivityIndicator, FlatList, Text, View, RefreshControl } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { DiasCompletadosViewModel } from "../models/DiasCompletadosViewModel";
 import { useState } from "react";
@@ -16,10 +16,9 @@ export function Home() {
 
   const [diasCompletados, setDiasCompletados] = useState([]);
 
-  const [loading, setLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false); // Estado para el refresco
 
   const cargarDiasCompletados = async () => {
-    setLoading(true);
     try {
       const token = await AsyncStorage.getItem("@auth_token");
       if (token) {
@@ -30,15 +29,25 @@ export function Home() {
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
   useEffect(() => {
     cargarDiasCompletados();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const refreshData = async () => {
+    setIsRefreshing(true); // Inicia el refresco
+    try {
+      const token = await AsyncStorage.getItem("@auth_token");
+      const respuesta = await handleDiasCompletados(token);
+      setDiasCompletados(respuesta.datos.completedDays || []);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsRefreshing(false); // Finaliza el refresco
+    }
+  };
   return (
     <View
       style={{ flex: 1, paddingBottom: insets.bottom }}
@@ -94,17 +103,10 @@ export function Home() {
             <Text className="text-2xl">No hay días completados</Text>
           </View>
         }
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={refreshData} />
+        }
       />
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : (
-        <TouchableOpacity
-          className="border rounded-xl w-1/2 m-3"
-          onPress={cargarDiasCompletados}
-        >
-          <Text className="p-3 text-center">Actualizar</Text>
-        </TouchableOpacity>
-      )}
     </View>
   );
 }

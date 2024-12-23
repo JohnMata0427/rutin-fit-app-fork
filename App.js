@@ -28,7 +28,7 @@ export default function App() {
         console.log("No se otorgaron permisos de notificaciones");
         return;
       }
-      const tokenNotificacion = ( await Notifications.getExpoPushTokenAsync()).data;
+      const tokenNotificacion = (await Notifications.getExpoPushTokenAsync()).data;
       await tokenNotification(authToken ,tokenNotificacion); 
     } catch (error) {
       console.log("Error al obtener token de notificación: ", error);

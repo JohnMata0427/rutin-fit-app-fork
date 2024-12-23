@@ -19,7 +19,8 @@ import ModalPersonalizado from "../layouts/Modal";
 
 export function UpdateProfileScreen({ navigation, route }) {
   const insets = useSafeAreaInsets();
-  const { handleUpdateProfile , mensajesBack , modalVisible, setModalVisible} = ActualizarPerfilViewModel();
+  const { handleUpdateProfile, mensajesBack, modalVisible, setModalVisible } =
+    ActualizarPerfilViewModel();
   const { perfil } = route.params;
   const [datos, setDatos] = useState({
     name: perfil.client?.user_id?.name || "",
@@ -45,35 +46,74 @@ export function UpdateProfileScreen({ navigation, route }) {
   };
 
   useEffect(() => {
-    
     obtenerToken();
     // Aquí puedes cargar los datos existentes del perfil si es necesario
   }, []);
 
   const handleSave = async () => {
-    try {
-      const respuesta = await handleUpdateProfile(
-        token,
-        datos.name,
-        datos.lastname,
-        datos.email,
-        datos.genre,
-        datos.weight,
-        datos.height,
-        datos.age,
-        datos.levelactivity,
+    // Validar que los datos sean correctos
+    if (datos.name.length < 3 || datos.name.length > 50) {
+      Alert.alert("Error", "El nombre ingresado es muy corto o muy largo");
+    } else if (datos.lastname.length < 3 || datos.lastname.length > 50) {
+      Alert.alert("Error", "El apellido ingresado es muy corto o muy largo");
+    } else if (
+      Object.values(datos.age || datos.height || datos.weight).includes(".") ||
+      Object.values(datos.age || datos.height || datos.weight).includes(",") ||
+      Object.values(datos.age || datos.height || datos.weight).includes("-") ||
+      Object.values(datos.age || datos.height || datos.weight).includes("+") ||
+      Object.values(
+        datos.age ||
+        datos.height ||
+        datos.weight ||
+        datos.levelactivity ||
         datos.days
+      ).includes(" ")
+    ) {
+      Alert.alert("Error", "No se permiten caracteres especiales");
+    } else if (datos.age < 3 || datos.age > 100) {
+      Alert.alert("Error", "La edad debe ser entre 3 y 100 años");
+    } else if (datos.height < 30 || datos.height > 250) {
+      Alert.alert(
+        "Error",
+        "La altura ingresada es poco realista o no es un número"
       );
-      
-      if(respuesta.success){
-        Alert.alert("Éxito", "Perfil actualizado con éxito", [{
-          text: "Aceptar",
-          onPress: () => navigation.navigate("Home")
-        }])};
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setLoading(false);
+    } else if (datos.weight < 10 || datos.weight > 500) {
+      Alert.alert(
+        "Error",
+        "El peso ingresado es poco realista o no es un número"
+      );
+    } else if (datos.levelactivity === "") {
+      Alert.alert("Error", "Debes seleccionar tu nivel de actividad física");
+    } else if (datos.days.length === 0) {
+      Alert.alert("Error", "Debes seleccionar días de entrenamiento");
+    } else {
+      try {
+        const respuesta = await handleUpdateProfile(
+          token,
+          datos.name,
+          datos.lastname,
+          datos.email,
+          datos.genre,
+          datos.weight,
+          datos.height,
+          datos.age,
+          datos.levelactivity,
+          datos.days
+        );
+
+        if (respuesta.success) {
+          Alert.alert("Éxito", "Perfil actualizado con éxito", [
+            {
+              text: "Aceptar",
+              onPress: () => navigation.navigate("Home"),
+            },
+          ]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -128,8 +168,9 @@ export function UpdateProfileScreen({ navigation, route }) {
           mensajes={mensajesBack}
         />
         <View className="items-center justify-center space-y-3 mt-5 mb-5">
-
-          <Text className="text-3xl font-bold text-center ">Actualización de perfil</Text>
+          <Text className="text-3xl font-bold text-center ">
+            Actualización de perfil
+          </Text>
 
           <View className="flex-col" style={{ width: "80%" }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
@@ -155,7 +196,9 @@ export function UpdateProfileScreen({ navigation, route }) {
               <TextInput
                 placeholder="Ingrese su género (masculino/femenino)"
                 value={datos.lastname}
-                onChangeText={(value) => setDatos({ ...datos, lastname: value })}
+                onChangeText={(value) =>
+                  setDatos({ ...datos, lastname: value })
+                }
                 className="text-lg text-center"
               />
             </View>
@@ -246,7 +289,9 @@ export function UpdateProfileScreen({ navigation, route }) {
               <TextInput
                 placeholder="Ingrese su género (masculino/femenino)"
                 value={datos.levelactivity}
-                onChangeText={(value) => setDatos({ ...datos, levelactivity: value })}
+                onChangeText={(value) =>
+                  setDatos({ ...datos, levelactivity: value })
+                }
                 className="text-lg text-center"
               />
             </View>
@@ -259,23 +304,23 @@ export function UpdateProfileScreen({ navigation, route }) {
             </View>
             <View className="border-b-[#82E5B5] border-b-2 rounded-2xl flex-col justify-center items-center w-full">
               <TextInput
-              placeholder="Ingrese los días disponibles (separados por comas)"
-              value={datos.days.join(", ")}
-              onChangeText={(value) =>
-                setDatos({
-                  ...datos,
-                  days: value.split(",").map((day) => day.trim()),
-                })
-              }
-              multiline
-              className="text-lg text-center" 
+                placeholder="Ingrese los días disponibles (separados por comas)"
+                value={datos.days.join(", ")}
+                onChangeText={(value) =>
+                  setDatos({
+                    ...datos,
+                    days: value.split(",").map((day) => day.trim()),
+                  })
+                }
+                multiline
+                className="text-lg text-center"
               />
             </View>
           </View>
           <View className="flex flex-row justify-evenly items-center w-full">
             <TouchableOpacity
-            className="border-2 p-2 rounded-md bg-[#82E5B5]"
-            onPress={handleSave}
+              className="border-2 p-2 rounded-md bg-[#82E5B5]"
+              onPress={handleSave}
             >
               {loading ? (
                 <ActivityIndicator size="large" color="#0000ff" />
@@ -283,13 +328,12 @@ export function UpdateProfileScreen({ navigation, route }) {
                 <Text className="text-base text-center">Guardar</Text>
               )}
             </TouchableOpacity>
-            <TouchableOpacity 
-            onPress={() => navigation.goBack()}
-            className="border-2 p-2 rounded-md bg-[#82E5B5]"
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              className="border-2 p-2 rounded-md bg-[#82E5B5]"
             >
               <Text className="text-base text-center">Cancelar</Text>
             </TouchableOpacity>
-
           </View>
           {loading && <ActivityIndicator size="small" color="#0000ff" />}
         </View>

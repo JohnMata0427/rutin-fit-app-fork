@@ -93,7 +93,7 @@ export async function olvidarContraseña(codigo) {
 
 export async function rutina(token) {
   const respuesta = await axios.get(
-    `${process.env.EXPO_PUBLIC_BACKEND}/client/view-routine`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/client/view-routine`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -186,3 +186,34 @@ export async function tokenNotification(token, tokenN) {
   );
   return respuesta.data;
 }
+
+export async function progreso(token, id, observations, currentWeight) {
+  const respuesta = await axios.put(
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/progress/${id}`,
+    { observations , currentWeight },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return respuesta.data;
+}
+
+export async function crearProgreso(token, observations, currentWeight) {
+  console.log("Token: ", token);
+  console.log("Observaciones: ", observations);
+  console.log("Peso: ", currentWeight);
+  
+  const respuesta = await axios.post(
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/progress`,
+    { observations , currentWeight },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return respuesta.data;
+}
+

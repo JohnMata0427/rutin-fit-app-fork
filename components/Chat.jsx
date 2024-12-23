@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
@@ -16,7 +16,6 @@ const socket = io(`${process.env.EXPO_PUBLIC_BACKEND}`.replace("/api/v1", ""));
 
 export function Chat() {
   const insets = useSafeAreaInsets();
-  const flatListRef = useRef();
 
   const { handleChat } = ChatViewModel();
   const { handlePerfil } = PerfilViewModel();
@@ -25,6 +24,7 @@ export function Chat() {
   const [mensajeNuevo, setMensajeNuevo] = useState("");
   const [perfil, setPerfil] = useState({});
   const [conectado, setConectado] = useState(true);
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
     const suscribir = NetInfo.addEventListener(state => setConectado(state.isConnected));
@@ -32,77 +32,70 @@ export function Chat() {
   }, []);
 
   useEffect(() => {
-    const obtenerPerfil = async () => {
-      try {
-        const usuario = await AsyncStorage.getItem("@perfil");
-        if (usuario) {
-          setPerfil(JSON.parse(usuario));
-        } else {
-          const token = await AsyncStorage.getItem("@auth_token");
-          const perfilBDD = await handlePerfil(token);
-          setPerfil(perfilBDD.datos);
-          await AsyncStorage.setItem("@perfil", JSON.stringify(perfilBDD.datos));
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    obtenerPerfil();
-  }, [handlePerfil]);
-
-  useEffect(() => {
-    const obtenerHistorial = async () => {
+    const inicializar = async () => {
       try {
         const token = await AsyncStorage.getItem("@auth_token");
-        const usuario = await AsyncStorage.getItem("@perfil");
+        console.log("Token: ", token);
         
-        if (token && usuario) {
-          const client_id = JSON.parse(usuario).client._id;
-          socket.emit("join", client_id);
-          const coach_id = JSON.parse(usuario).client.coach_id._id;
-          const respuesta = await handleChat(token, client_id, coach_id);
-          setMensajes(respuesta.datos); // No invertimos los mensajes
+        setToken(token);
+
+        const usuarioLocal = await AsyncStorage.getItem("@perfil");
+        console.log("Perfil local: ", usuarioLocal);
+        
+        let usuarioBDD;
+        if (usuarioLocal) {
+          usuarioBDD = JSON.parse(usuarioLocal);
         } else {
           const perfilBDD = await handlePerfil(token);
-          const client_id = perfilBDD.datos.client._id;
+          usuarioBDD = perfilBDD.datos;
+          await AsyncStorage.setItem("@perfil", JSON.stringify(perfilBDD.datos));
+        }
+        setPerfil(usuarioBDD);
+
+        if (usuarioBDD) {
+          const client_id = usuarioBDD.client._id;
+          const coach_id = usuarioBDD.client.coach_id._id;
           socket.emit("join", client_id);
-          const coach_id = perfilBDD.datos.client.coach_id._id;
           const respuesta = await handleChat(token, client_id, coach_id);
-          setMensajes(respuesta.datos); // No invertimos los mensajes
+          setMensajes(respuesta.datos);
         }
+
       } catch (error) {
-        console.log(error);
-      } finally {
-        requestAnimationFrame(() => {
-          if (flatListRef.current) {
-            flatListRef.current.scrollToEnd({ animated: false });
-          }
-        })
+        console.error(error);
       }
-
-    };
-
-    obtenerHistorial(); 
-      
-      socket.on("receive", mensaje => {
-        setMensajes(state => [...state, mensaje]); // Agregar el nuevo mensaje al principio 
-        if (flatListRef.current && mensajes.length > 0) {
-          requestAnimationFrame(() => flatListRef.current.scrollToEnd({ animated: true }));
-        }
-      });
-    
-    return () => socket.off("receive");
-  }, [flatListRef, handleChat, handlePerfil, mensajes.length]);
-
-  useEffect(() => {
-    if (flatListRef.current && mensajes.length > 0) {
-      requestAnimationFrame(() => flatListRef.current.scrollToEnd({ animated: false }));
     }
-  }, [mensajes]);
+    inicializar();
+    socket.on("receive", mensaje => {
+      setMensajes(state => [...state, mensaje]); // Agregar el nuevo mensaje al principio 
+    });
+    return () => socket.off("receive");
+  }, [token]);
 
-  const enviarMensaje = () => {
+  // useEffect(() => {
+  //   const obtenerHistorial = async () => {
+  //     try {
+  //       const client_id = perfil.client._id;
+  //       socket.emit("join", client_id);
+  //       const coach_id = perfil.client.coach_id._id;
+  //       const respuesta = await handleChat(token, client_id, coach_id);
+  //       setMensajes(respuesta.datos);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+
+  //   };
+
+  //   obtenerHistorial(); 
+      
+  //     socket.on("receive", mensaje => {
+  //       setMensajes(state => [...state, mensaje]); // Agregar el nuevo mensaje al principio 
+  //     });
+    
+  //   return () => socket.off("receive");
+  // }, [handleChat, perfil.client, token]);
+
+  const enviarMensaje = useCallback(() => {
     if (mensajeNuevo.trim() === "") return;
-
     const nuevoMensaje = {
       message: mensajeNuevo.trim(),
       transmitter: perfil.client._id,
@@ -113,14 +106,11 @@ export function Chat() {
       coach_id: perfil.client.coach_id._id,
       createdAt: Date.now(),
     };
-
     setMensajes([...mensajes, nuevoMensaje]); // Agregar el nuevo mensaje al principio
     setMensajeNuevo("");
     socket.emit("send", nuevoMensaje);
-    if (flatListRef.current && mensajes.length > 0) {
-      requestAnimationFrame(() => flatListRef.current.scrollToEnd({ animated: true }));
-    }
-  };
+  }, [mensajeNuevo, perfil]);
+  
   const MensajesItem = React.memo(({ item , perfil }) => {
     const messageDate = new Date(item.createdAt);
     return (
@@ -151,7 +141,6 @@ export function Chat() {
           behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
         <AutoScrollFlatList
-          ref={flatListRef}
           className="flex-1  mt-2 overflow-hidden"
           data={mensajes}
           keyExtractor={(item, index) => index.toString()}

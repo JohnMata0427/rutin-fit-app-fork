@@ -3,12 +3,13 @@ import {
   Image,
   ScrollView,
   TextInput,
-  Pressable,
   Text,
-  Alert
+  Alert,
+  TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import React , { useState } from "react";
+import React, { useState } from "react";
 import imagenes from "../assets/images.js";
 import { Shadow } from "react-native-shadow-2";
 import Header from "../layouts/Header";
@@ -19,18 +20,25 @@ export function OlvidarPassword({ navigation }) {
   const insets = useSafeAreaInsets();
 
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const enviarCorreo = async () => {
+    setLoading(true);
     try {
-      const datos = await restaurarContraseña(email)
+      const datos = await restaurarContraseña(email);
       if (datos) {
-        Alert.alert("Éxito", "Verifica tu correo electrónico para restablecer tu contraseña");
+        Alert.alert(
+          "Éxito",
+          "Verifica tu correo electrónico para restablecer tu contraseña"
+        );
         navigation.navigate("CodigoPassword", { email });
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <View
@@ -74,7 +82,7 @@ export function OlvidarPassword({ navigation }) {
               />
             </View>
             <View className="flex-row w-full justify-evenly">
-              <Pressable
+              <TouchableOpacity
                 style={{
                   backgroundColor: "#82E5B5",
                   padding: 10,
@@ -82,9 +90,13 @@ export function OlvidarPassword({ navigation }) {
                 }}
                 onPress={enviarCorreo}
               >
-                <Text className="">Enviar</Text>
-              </Pressable>
-              <Pressable
+                {loading ? (
+                  <ActivityIndicator color="#fff" size="small" />
+                ) : (
+                  <Text className="">Enviar</Text>
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity
                 onPress={() => navigation.navigate("Login")}
                 style={{
                   backgroundColor: "#82E5B5",
@@ -93,7 +105,7 @@ export function OlvidarPassword({ navigation }) {
                 }}
               >
                 <Text className="">Cancelar</Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
           </View>
         </Shadow>

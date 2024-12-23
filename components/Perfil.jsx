@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, Text, View, Image, Alert, Switch } from "react-native";
+import {
+  ScrollView,
+  Text,
+  View,
+  Image,
+  Alert,
+  Switch,
+  RefreshControl,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import imagenes from "../assets/images";
 import { LinearGradient } from "expo-linear-gradient";
@@ -8,28 +16,29 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TouchableOpacity } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import NetInfo from "@react-native-community/netinfo";
-import Ionicons from '@expo/vector-icons/Ionicons';
-import * as Notifications from "expo-notifications"
+import * as Notifications from "expo-notifications";
 
 export function Perfil({ navigation }) {
   const insets = useSafeAreaInsets();
 
   const { handlePerfil } = PerfilViewModel();
   const [perfil, setPerfil] = useState({});
-  const [ notificaciones , setNotificaciones ] = useState(false);
+  const [notificaciones, setNotificaciones] = useState(false);
+
+  const [isRefreshing, setIsRefreshing] = useState(false); // Estado para el refresco
 
   useEffect(() => {
     const verificarEstadoPermisos = async () => {
       const { status } = await Notifications.getPermissionsAsync();
-      setNotificaciones( status === 'granted' );
-    }
+      setNotificaciones(status === "granted");
+    };
     verificarEstadoPermisos();
   }, []);
 
-  const handleNotificaciones = async ( valor ) => {
-    if ( valor ) {
+  const handleNotificaciones = async (valor) => {
+    if (valor) {
       const { status } = await Notifications.getPermissionsAsync();
-      if ( status === 'granted' ) {
+      if (status === "granted") {
         setNotificaciones(true);
         Alert.alert("Éxito", "Se han habilitado las notificaciones");
       } else {
@@ -38,9 +47,12 @@ export function Perfil({ navigation }) {
       }
     } else {
       setNotificaciones(false);
-      Alert.alert("Notificaciones desactivadas", "Ya no recibiras notificaciones");
+      Alert.alert(
+        "Notificaciones desactivadas",
+        "Ya no recibiras notificaciones"
+      );
     }
-  }
+  };
 
   const dias = [
     "lunes",
@@ -95,7 +107,7 @@ export function Perfil({ navigation }) {
         const { isConnected } = await NetInfo.fetch();
         if (isConnected) {
           const resultado = await handlePerfil(token);
-          setPerfil(resultado.datos)
+          setPerfil(resultado.datos);
           guardarDatosLocalmente("@perfil", resultado.datos);
         } else {
           const datosLocales = await obtenerDatosLocales("@perfil");
@@ -116,11 +128,23 @@ export function Perfil({ navigation }) {
     }
   };
   useEffect(() => {
-
     obtenerDatosPerfil();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const refreshData = async () => {
+    setIsRefreshing(true); // Inicia el refresco
+    try {
+      const token = await AsyncStorage.getItem("@auth_token");
+      const resultado = await handlePerfil(token);
+      setPerfil(resultado.datos);
+      guardarDatosLocalmente("@perfil", resultado.datos);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsRefreshing(false); // Finaliza el refresco
+    }
+  };
   return (
     <View
       style={{
@@ -165,22 +189,23 @@ export function Perfil({ navigation }) {
           flexGrow: 1,
           justifyContent: "center",
         }}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={refreshData} />
+        }
       >
         <View className="items-center justify-center space-y-3">
           <View className="flex-row items-center justify-center space-y-3 space-x-5">
             <Text className="text-3xl font-bold text-center mt-4">Perfil</Text>
             <TouchableOpacity
-            onPress={() => navigation.navigate("UpdateProfile", {perfil})}       
+              onPress={() => navigation.navigate("UpdateProfile", { perfil })}
             >
               <AntDesign name="edit" size={30} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity
-            onPress={obtenerDatosPerfil}
-            >
-            <Ionicons name="reload" size={24} color="black" />
-            </TouchableOpacity>
-            <Text className="font-bold" >Notificaciones: </Text>
-            <Switch value={notificaciones} onValueChange={handleNotificaciones} />
+            <Text className="font-bold">Notificaciones: </Text>
+            <Switch
+              value={notificaciones}
+              onValueChange={handleNotificaciones}
+            />
           </View>
           <View className="flex-col" style={{ width: "80%" }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
@@ -197,7 +222,9 @@ export function Perfil({ navigation }) {
               <Text className="text-sm">Apellido: </Text>
             </View>
             <View className="border-b-[#82E5B5] border-b-2 rounded-2xl flex-col justify-center items-center w-full">
-              <Text className="text-lg">{perfil?.client?.user_id?.lastname}</Text>
+              <Text className="text-lg">
+                {perfil?.client?.user_id?.lastname}
+              </Text>
             </View>
           </View>
           <View className="flex-col" style={{ width: "80%" }}>

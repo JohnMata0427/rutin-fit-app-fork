@@ -338,14 +338,14 @@ export function Rutinas() {
               </View>
             </List.Accordion>
           ))}
-          <View className="p-3 border space-x-3 rounded-md items-center">
+          <View className="p-3 border space-y-3 rounded-md mt-5">
             <Text className="text-xl ">¿Has sentido algún progreso?</Text>
-            <Text>Puedes agregar tus cambios aquí:</Text>
-            <Text className="">
+            <Text className="text-green-400">
               Por favor recuerda que los cambios deben ser respetuosos y
               constructivos, además, los cambios ingresados afectarán a su
               perfil, por ende, asegúrese de que los cambios sean correctos.
             </Text>
+            <Text>Puedes agregar tus cambios aquí:</Text>
             <TextInput
               multiline={true}
               numberOfLines={3}

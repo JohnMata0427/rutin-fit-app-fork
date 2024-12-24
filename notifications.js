@@ -18,7 +18,6 @@ export const registrarToken = async (token) => {
         }
 
         const tokenN = (await Notificatios.getExpoPushTokenAsync()).data;
-        console.log("Token de notificación: ", tokenN);
 
         await tokenNotification(token, tokenN);
     } catch (error) {

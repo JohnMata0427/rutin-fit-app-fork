@@ -59,7 +59,7 @@ export async function datosCliente(
 
 export async function entrenadores(token) {
   const respuesta = await axios.get(
-    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/coach/view-coaches`,
+    `${process.env.EXPO_PUBLIC_BACKEND}/coach/view-coaches`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -71,7 +71,7 @@ export async function entrenadores(token) {
 
 export async function perfil(token) {
   const respuesta = await axios.get(
-    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/client/view-profile`,
+    `${process.env.EXPO_PUBLIC_BACKEND}/client/view-profile`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -93,7 +93,7 @@ export async function olvidarContraseña(codigo) {
 
 export async function rutina(token) {
   const respuesta = await axios.get(
-    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/client/view-routine`,
+    `${process.env.EXPO_PUBLIC_BACKEND}/client/view-routine`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -106,7 +106,7 @@ export async function rutina(token) {
 
 export async function chat(token, client_id, coach_id) {
   const respuesta = await axios.get(
-    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/chats/${client_id}/${coach_id}`,
+    `${process.env.EXPO_PUBLIC_BACKEND}/chats/${client_id}/${coach_id}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -189,7 +189,7 @@ export async function tokenNotification(token, tokenN) {
 
 export async function progreso(token, id, observations, currentWeight) {
   const respuesta = await axios.put(
-    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/progress/${id}`,
+    `${process.env.EXPO_PUBLIC_BACKEND}/progress/${id}`,
     { observations , currentWeight },
     {
       headers: {
@@ -201,12 +201,8 @@ export async function progreso(token, id, observations, currentWeight) {
 }
 
 export async function crearProgreso(token, observations, currentWeight) {
-  console.log("Token: ", token);
-  console.log("Observaciones: ", observations);
-  console.log("Peso: ", currentWeight);
-  
   const respuesta = await axios.post(
-    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/progress`,
+    `${process.env.EXPO_PUBLIC_BACKEND}/progress`,
     { observations , currentWeight },
     {
       headers: {

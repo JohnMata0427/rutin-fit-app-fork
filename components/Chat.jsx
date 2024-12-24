@@ -35,12 +35,10 @@ export function Chat() {
     const inicializar = async () => {
       try {
         const token = await AsyncStorage.getItem("@auth_token");
-        console.log("Token: ", token);
         
         setToken(token);
 
         const usuarioLocal = await AsyncStorage.getItem("@perfil");
-        console.log("Perfil local: ", usuarioLocal);
         
         let usuarioBDD;
         if (usuarioLocal) {
@@ -69,30 +67,8 @@ export function Chat() {
       setMensajes(state => [...state, mensaje]); // Agregar el nuevo mensaje al principio 
     });
     return () => socket.off("receive");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
-
-  // useEffect(() => {
-  //   const obtenerHistorial = async () => {
-  //     try {
-  //       const client_id = perfil.client._id;
-  //       socket.emit("join", client_id);
-  //       const coach_id = perfil.client.coach_id._id;
-  //       const respuesta = await handleChat(token, client_id, coach_id);
-  //       setMensajes(respuesta.datos);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-
-  //   };
-
-  //   obtenerHistorial(); 
-      
-  //     socket.on("receive", mensaje => {
-  //       setMensajes(state => [...state, mensaje]); // Agregar el nuevo mensaje al principio 
-  //     });
-    
-  //   return () => socket.off("receive");
-  // }, [handleChat, perfil.client, token]);
 
   const enviarMensaje = useCallback(() => {
     if (mensajeNuevo.trim() === "") return;

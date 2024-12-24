@@ -51,6 +51,7 @@ export function UpdateProfileScreen({ navigation, route }) {
   }, []);
 
   const handleSave = async () => {
+    setLoading(true);
     // Validar que los datos sean correctos
     if (datos.name.length < 3 || datos.name.length > 50) {
       Alert.alert("Error", "El nombre ingresado es muy corto o muy largo");
@@ -246,6 +247,7 @@ export function UpdateProfileScreen({ navigation, route }) {
                 value={datos.weight}
                 onChangeText={(value) => setDatos({ ...datos, weight: value })}
                 className="text-lg text-center"
+                editable={false}
               />
             </View>
           </View>
@@ -323,7 +325,7 @@ export function UpdateProfileScreen({ navigation, route }) {
               onPress={handleSave}
             >
               {loading ? (
-                <ActivityIndicator size="large" color="#0000ff" />
+                <ActivityIndicator size="small" color="#fff" />
               ) : (
                 <Text className="text-base text-center">Guardar</Text>
               )}
@@ -335,7 +337,6 @@ export function UpdateProfileScreen({ navigation, route }) {
               <Text className="text-base text-center">Cancelar</Text>
             </TouchableOpacity>
           </View>
-          {loading && <ActivityIndicator size="small" color="#0000ff" />}
         </View>
       </ScrollView>
     </View>

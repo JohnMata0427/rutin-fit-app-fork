@@ -62,7 +62,6 @@ export function Registro({ navigation }) {
         <KeyboardAwareScrollView
           contentContainerStyle={{
             flexGrow: 1,
-            justifyContent: "center",
             alignItems: "center",
           }}
           resetScrollToCoords={{ x: 0, y: 0 }}
@@ -70,7 +69,7 @@ export function Registro({ navigation }) {
         >
           <View className="mt-14 mb-14">
             <Shadow
-              className="rounded-xl w-full"
+              className=""
               distance={15}
               startColor={"rgba(130, 229, 181, 0.5)"}
             >

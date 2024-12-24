@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function login(email, password) {
   const respuesta = await axios.post(
-    `${process.env.EXPO_PUBLIC_BACKEND}/login`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/login`,
     { email, password }
   );
   return respuesta.data;
@@ -10,7 +10,7 @@ export async function login(email, password) {
 
 export async function register(name, lastname, email, password) {
   const respuesta = await axios.post(
-    `${process.env.EXPO_PUBLIC_BACKEND}/client/only-register`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/client/only-register`,
     { name, lastname, email, password }
   );
   return respuesta.data;
@@ -18,7 +18,7 @@ export async function register(name, lastname, email, password) {
 
 export async function confirmarEmail(email, code) {
   const respuesta = await axios.post(
-    `${process.env.EXPO_PUBLIC_BACKEND}/client/confirm-email`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/client/confirm-email`,
     {
       email,
       code,
@@ -38,7 +38,7 @@ export async function datosCliente(
   coach_id
 ) {
   const respuesta = await axios.post(
-    `${process.env.EXPO_PUBLIC_BACKEND}/client/configure-profile`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/client/configure-profile`,
     {
       genre,
       weight,
@@ -59,7 +59,7 @@ export async function datosCliente(
 
 export async function entrenadores(token) {
   const respuesta = await axios.get(
-    `${process.env.EXPO_PUBLIC_BACKEND}/coach/view-coaches`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/coach/view-coaches`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -71,7 +71,7 @@ export async function entrenadores(token) {
 
 export async function perfil(token) {
   const respuesta = await axios.get(
-    `${process.env.EXPO_PUBLIC_BACKEND}/client/view-profile`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/client/view-profile`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -83,7 +83,7 @@ export async function perfil(token) {
 
 export async function olvidarContraseña(codigo) {
   const respuesta = await axios.post(
-    `${process.env.EXPO_PUBLIC_BACKEND}/client/forget-password`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/client/forget-password`,
     {
       code: codigo,
     }
@@ -93,7 +93,7 @@ export async function olvidarContraseña(codigo) {
 
 export async function rutina(token) {
   const respuesta = await axios.get(
-    `${process.env.EXPO_PUBLIC_BACKEND}/client/view-routine`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/client/view-routine`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -106,7 +106,7 @@ export async function rutina(token) {
 
 export async function chat(token, client_id, coach_id) {
   const respuesta = await axios.get(
-    `${process.env.EXPO_PUBLIC_BACKEND}/chats/${client_id}/${coach_id}`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/chats/${client_id}/${coach_id}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -118,7 +118,7 @@ export async function chat(token, client_id, coach_id) {
 
 export async function marcarDia(token, day) {
   const respuesta = await axios.post(
-    `${process.env.EXPO_PUBLIC_BACKEND}/client/mark-day-completed`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/client/mark-day-completed`,
     { day },
     {
       headers: {
@@ -131,7 +131,7 @@ export async function marcarDia(token, day) {
 
 export async function obtenerDiasCompletados(token) {
   const respuesta = await axios.get(
-    `${process.env.EXPO_PUBLIC_BACKEND}/client/view-completed-days`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/client/view-completed-days`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
   return respuesta.data;
@@ -150,7 +150,7 @@ export async function actualizarPerfil(
   days
 ) {
   const respuesta = await axios.put(
-    `${process.env.EXPO_PUBLIC_BACKEND}/client/update-profile`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/client/update-profile`,
     { name, lastname, email, genre, weight, height, age, levelactivity, days },
     {
       headers: {
@@ -163,7 +163,7 @@ export async function actualizarPerfil(
 
 export async function restaurarContraseña(email) {
   const respuesta = await axios.post(
-    `${process.env.EXPO_PUBLIC_BACKEND}/client/restore-password`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/client/restore-password`,
     { email }
   );
   return respuesta.data;
@@ -171,7 +171,7 @@ export async function restaurarContraseña(email) {
 
 export async function cambiarContraseña(email, password, confirmPassword) {
   const respuesta = await axios.put(
-    `${process.env.EXPO_PUBLIC_BACKEND}/client/new-password`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/client/new-password`,
     { email, password, confirmPassword }
   );
   return respuesta.data;
@@ -180,7 +180,7 @@ export async function cambiarContraseña(email, password, confirmPassword) {
 export async function tokenNotification(token, tokenN) {
   
   const respuesta = await axios.post(
-    `${process.env.EXPO_PUBLIC_BACKEND}/save-notification-token`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/save-notification-token`,
     { token: tokenN },
     { headers: { Authorization: `Bearer ${token}` } }
   );
@@ -189,7 +189,7 @@ export async function tokenNotification(token, tokenN) {
 
 export async function progreso(token, id, observations, currentWeight) {
   const respuesta = await axios.put(
-    `${process.env.EXPO_PUBLIC_BACKEND}/progress/${id}`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/progress/${id}`,
     { observations , currentWeight },
     {
       headers: {
@@ -202,7 +202,7 @@ export async function progreso(token, id, observations, currentWeight) {
 
 export async function crearProgreso(token, observations, currentWeight) {
   const respuesta = await axios.post(
-    `${process.env.EXPO_PUBLIC_BACKEND}/progress`,
+    `${process.env.EXPO_PUBLIC_BACKEND_LOCAL}/progress`,
     { observations , currentWeight },
     {
       headers: {

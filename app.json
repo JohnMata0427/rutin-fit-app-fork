@@ -23,13 +23,15 @@
       "package": "com.joelms.RutinFit"
     },
     "web": {
-      "favicon": "./assets/loginIcon.png"
+      "favicon": "./assets/loginIcon.png",
+      "blunder": "metro"
     },
     "extra": {
       "eas": {
         "projectId": "03274512-1280-4504-af8d-9c1963fb84e6"
       }
     },
-    "owner": "joelms"
+    "owner": "joelms",
+    "sdkVersion": "51.0.0"
   }
 }

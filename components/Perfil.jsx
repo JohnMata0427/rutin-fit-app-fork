@@ -24,7 +24,7 @@ export function Perfil({ navigation }) {
   const { handlePerfil } = PerfilViewModel();
   const [perfil, setPerfil] = useState({});
   const [notificaciones, setNotificaciones] = useState(false);
-
+  const [token, setToken] = useState(null);
   const [isRefreshing, setIsRefreshing] = useState(false); // Estado para el refresco
 
   useEffect(() => {
@@ -33,6 +33,15 @@ export function Perfil({ navigation }) {
       setNotificaciones(status === "granted");
     };
     verificarEstadoPermisos();
+  }, []);
+
+  useEffect(() => {
+    const token = async () => {
+      const token = await AsyncStorage.getItem("@auth_token");
+      console.log("Token: ", token);
+      setToken(token);
+    };
+    token();
   }, []);
 
   const handleNotificaciones = async (valor) => {
@@ -66,19 +75,11 @@ export function Perfil({ navigation }) {
 
   const guardarDatosLocalmente = async (key, valores) => {
     try {
-      await AsyncStorage.setItem(key, JSON.stringify(valores));
+      if (valores) {
+        await AsyncStorage.setItem(key, JSON.stringify(valores));
+      }
     } catch (error) {
       console.log("Error al guardar los datos localmente: ", error);
-    }
-  };
-
-  const obtenerDatosLocales = async (key) => {
-    try {
-      const data = await AsyncStorage.getItem(key);
-      return data ? JSON.parse(data) : null;
-    } catch (error) {
-      console.log("Error al obtener los datos localmente: ", error);
-      return null;
     }
   };
 
@@ -102,26 +103,22 @@ export function Perfil({ navigation }) {
 
   const obtenerDatosPerfil = async () => {
     try {
-      const token = await AsyncStorage.getItem("@auth_token");
-      if (token) {
-        const { isConnected } = await NetInfo.fetch();
-        if (isConnected) {
-          const resultado = await handlePerfil(token);
-          setPerfil(resultado.datos);
-          guardarDatosLocalmente("@perfil", resultado.datos);
-        } else {
-          const datosLocales = await obtenerDatosLocales("@perfil");
-          if (datosLocales) {
-            setPerfil(JSON.parse(datosLocales));
-          } else {
-            Alert.alert(
-              "Sin conexión",
-              "No tienes conexión a internet y no hay datos almacenador localmente"
-            );
-          }
-        }
+      const { isConnected } = await NetInfo.fetch();
+      if (isConnected && token) {
+        const resultado = await handlePerfil(token);
+        setPerfil(resultado.datos);
+        await guardarDatosLocalmente("@perfil", resultado.datos);
       } else {
-        Alert.alert("Error", "No se encontró el token de autenticación");
+        const datosLocales = await AsyncStorage.getItem("@perfil");
+        if (datosLocales) {
+          console.log("Cargando datos desde el almcacen local....");
+          setPerfil(JSON.parse(datosLocales));
+        } else {
+          Alert.alert(
+            "Sin conexión",
+            "No tienes conexión a internet y no hay datos almacenador localmente"
+          );
+        }
       }
     } catch (error) {
       console.log(error);
@@ -130,7 +127,7 @@ export function Perfil({ navigation }) {
   useEffect(() => {
     obtenerDatosPerfil();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [token]);
 
   const refreshData = async () => {
     setIsRefreshing(true); // Inicia el refresco

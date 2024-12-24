@@ -100,7 +100,7 @@ export function Home() {
         ListEmptyComponent={
           <View className="w-full h-full items-center p-10">
             <FontAwesome5 name="sad-tear" size={24} color="black" />
-            <Text className="text-2xl">No hay días completados</Text>
+            <Text className="text-2xl font-bold">No hay días completados</Text>
           </View>
         }
         refreshControl={

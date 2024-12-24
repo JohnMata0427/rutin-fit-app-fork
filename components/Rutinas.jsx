@@ -160,7 +160,7 @@ export function Rutinas() {
           <Text className="text-2xl font-medium mb-2"> Rutinas Asignadas </Text>
         </View>
       </LinearGradient>
-      {rutina.existe ? (
+      {rutina.routine.length > 0 ? (
         <ScrollView
           contentContainerStyle={{
             flexGrow: 1,
@@ -378,7 +378,7 @@ export function Rutinas() {
           </View>
         </ScrollView>
       ) : (
-        <View className="flex flex-col items-center justify-center h-screen">
+        <View className="flex flex-col items-center p-10 h-screen">
           <FontAwesome5 name="sad-tear" size={24} color="black" />
           <Text className="text-2xl font-bold">No hay rutinas disponibles</Text>
         </View>

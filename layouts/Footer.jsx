@@ -5,7 +5,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 const Footer = () => {
   return (
     <Shadow
-      className="bg-black rounded-t-xl flex-row p-1 max-w-full w-full"
+      className=""
       distance={9}
       startColor={"#00000030"}
       offset={[10, 0]}

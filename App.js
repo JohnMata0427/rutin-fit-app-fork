@@ -16,6 +16,7 @@ import { CodigoPassword } from "./components/CodigoPassword";
 import { NuevaContraseña } from "./components/NuevaContraseña";
 import * as Notifications from 'expo-notifications';
 import { tokenNotification } from "./services/AuthService";
+import { QuienesSomos } from "./components/QuienesSomos";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -79,6 +80,7 @@ export default function App() {
           <Stack.Screen name="UpdateProfile" component={UpdateProfileScreen} />
           <Stack.Screen name="CodigoPassword" component={CodigoPassword} />
           <Stack.Screen name="NuevaContraseña" component={NuevaContraseña} />
+          <Stack.Screen name="QuienesSomos" component={QuienesSomos} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

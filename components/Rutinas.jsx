@@ -21,6 +21,7 @@ import { MarcarDiaViewModel } from "../models/MarcarDiaViewModel";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { crearProgreso, progreso } from "../services/AuthService";
 import { PerfilViewModel } from "../models/PerfilVewModel";
+import Entypo from "@expo/vector-icons/Entypo";
 
 export function Rutinas() {
   const insets = useSafeAreaInsets();
@@ -286,12 +287,15 @@ export function Rutinas() {
                                 <ActivityIndicator color="#fff" size="small" />
                               ) : (
                                 <TouchableOpacity
-                                  className="border-2 rounded-xl border-black bg-[#35b476]"
+                                  className="rounded-xl border-black bg-[#82E5B5] p-2"
                                   onPress={() => handleMarcarDiaPress(dia.day)}
                                 >
-                                  <Text className="text-center text-black font-semibold p-2">
-                                    Marcar como completado
-                                  </Text>
+                                  <View className="flex-row items-center justify-center">
+                                    <Text className="mr-2 font-bold">
+                                      Marcar como completado
+                                    </Text>
+                                    <AntDesign name="checkcircle" size={20} color="black" />
+                                  </View>
                                 </TouchableOpacity>
                               )}
                             </View>
@@ -316,7 +320,10 @@ export function Rutinas() {
                         )}
                       </List.Accordion>
                     ))}
-                  <View className="p-3 border space-x-3 rounded-md">
+                  <View
+                    className="p-3 border space-x-3 rounded-md"
+                    style={{ marginVertical: 5 }}
+                  >
                     <Text className="w-full font-bold text-base">
                       Comentarios:
                     </Text>
@@ -325,20 +332,26 @@ export function Rutinas() {
                     </Text>
                   </View>
                 </View>
-                <View className="flex-row p-3 border space-x-3 rounded-md items-center">
-                  <Text className="font-bold text-base">Fecha de inicio:</Text>
+                <View
+                  className="flex-row p-3 border space-x-3 rounded-md items-center"
+                  style={{ marginVertical: 5 }}
+                >
+                  <Text className="font-bold text-base">Fecha de inicio: </Text>
                   <Text>
                     {new Date(rutina.start_date).toLocaleDateString()}
                   </Text>
                 </View>
-                <View className="flex-row p-3 border space-x-3 rounded-md items-center">
-                  <Text className="font-bold text-base">Fecha de fin:</Text>
+                <View
+                  className="flex-row p-3 border rounded-md items-center"
+                  style={{ marginVertical: 5 }}
+                >
+                  <Text className="font-bold text-base">Fecha de fin: </Text>
                   <Text>{new Date(rutina.end_date).toLocaleDateString()}</Text>
                 </View>
               </View>
             </List.Accordion>
           ))}
-          <View className="p-3 border space-y-3 rounded-md mt-5">
+          <View className="p-3 border rounded-md mt-5">
             <Text className="text-xl ">¿Has sentido algún progreso?</Text>
             <Text className="text-green-400">
               Por favor recuerda que los cambios deben ser respetuosos y
@@ -365,16 +378,25 @@ export function Rutinas() {
                 setDatosProgresso({ ...datosProgresso, observations: text })
               }
             />
-            <TouchableOpacity
-              className="border-2 p-2 rounded-md bg-[#82E5B5]"
-              onPress={() => handleProgresso()}
+            <View
+              className="flex-row p-1 justify-center rounded-md"
+              style={{ marginVertical: 10 }}
             >
-              {loadingProgress ? (
-                <ActivityIndicator color="#fff" size="small" />
-              ) : (
-                <Text className="text-center"> Guardar</Text>
-              )}
-            </TouchableOpacity>
+              <TouchableOpacity
+                className="p-2 rounded-md bg-[#82E5B5]"
+                onPress={() => handleProgresso()}
+                style={{ marginVertical: 10 }}
+              >
+                {loadingProgress ? (
+                  <ActivityIndicator color="#fff" size="small" />
+                ) : (
+                  <View className="flex-row items-center">
+                    <Text className="mr-2 font-bold">Guardar</Text>
+                    <Entypo name="save" size={20} color="black" />
+                  </View>
+                )}
+              </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
       ) : (

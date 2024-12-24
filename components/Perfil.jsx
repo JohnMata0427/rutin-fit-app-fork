@@ -17,6 +17,8 @@ import { TouchableOpacity } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import NetInfo from "@react-native-community/netinfo";
 import * as Notifications from "expo-notifications";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+
 
 export function Perfil({ navigation }) {
   const insets = useSafeAreaInsets();
@@ -190,21 +192,23 @@ export function Perfil({ navigation }) {
           <RefreshControl refreshing={isRefreshing} onRefresh={refreshData} />
         }
       >
-        <View className="items-center justify-center space-y-3">
-          <View className="flex-row items-center justify-center space-y-3 space-x-5">
-            <Text className="text-3xl font-bold text-center mt-4">Perfil</Text>
+        <View className="items-center bg-white" style={{ marginVertical: 10 }}>
+          <View className="flex-row items-center w-full justify-evenly" style={{ marginVertical: 10 }}>
+            <Text className="text-3xl font-bold text-center">Perfil</Text>
             <TouchableOpacity
               onPress={() => navigation.navigate("UpdateProfile", { perfil })}
             >
               <AntDesign name="edit" size={30} color="black" />
             </TouchableOpacity>
-            <Text className="font-bold">Notificaciones: </Text>
-            <Switch
-              value={notificaciones}
-              onValueChange={handleNotificaciones}
-            />
+            <View className="flex-row items-center">
+              <Text className="font-bold">Notificaciones: </Text>
+              <Switch
+                value={notificaciones}
+                onValueChange={handleNotificaciones}
+              />
+            </View>
           </View>
-          <View className="flex-col" style={{ width: "80%" }}>
+          <View className="flex-col" style={{ width: "80%", marginVertical: 10 }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
               <AntDesign name="star" size={17} color="black" />
               <Text className="text-sm">Nombre: </Text>
@@ -213,7 +217,7 @@ export function Perfil({ navigation }) {
               <Text className="text-lg">{perfil?.client?.user_id?.name}</Text>
             </View>
           </View>
-          <View className="flex-col" style={{ width: "80%" }}>
+          <View className="flex-col" style={{ width: "80%", marginVertical: 10 }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
               <AntDesign name="star" size={17} color="black" />
               <Text className="text-sm">Apellido: </Text>
@@ -224,7 +228,7 @@ export function Perfil({ navigation }) {
               </Text>
             </View>
           </View>
-          <View className="flex-col" style={{ width: "80%" }}>
+          <View className="flex-col" style={{ width: "80%", marginVertical: 10 }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
               <AntDesign name="star" size={17} color="black" />
               <Text className="text-sm">Correo: </Text>
@@ -233,7 +237,7 @@ export function Perfil({ navigation }) {
               <Text className="text-lg">{perfil?.client?.user_id?.email}</Text>
             </View>
           </View>
-          <View className="flex-col" style={{ width: "80%" }}>
+          <View className="flex-col" style={{ width: "80%", marginVertical: 10 }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
               <AntDesign name="star" size={17} color="black" />
               <Text className="text-sm">Género: </Text>
@@ -242,7 +246,7 @@ export function Perfil({ navigation }) {
               <Text className="text-lg">{perfil?.client?.genre}</Text>
             </View>
           </View>
-          <View className="flex-col" style={{ width: "80%" }}>
+          <View className="flex-col" style={{ width: "80%", marginVertical: 10 }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
               <AntDesign name="star" size={17} color="black" />
               <Text className="text-sm">Peso: </Text>
@@ -251,7 +255,7 @@ export function Perfil({ navigation }) {
               <Text className="text-lg">{perfil?.client?.weight}</Text>
             </View>
           </View>
-          <View className="flex-col" style={{ width: "80%" }}>
+          <View className="flex-col" style={{ width: "80%", marginVertical: 10 }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
               <AntDesign name="star" size={17} color="black" />
               <Text className="text-sm">Altura: </Text>
@@ -260,7 +264,7 @@ export function Perfil({ navigation }) {
               <Text className="text-lg">{perfil?.client?.height}</Text>
             </View>
           </View>
-          <View className="flex-col" style={{ width: "80%" }}>
+          <View className="flex-col" style={{ width: "80%", marginVertical: 10 }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
               <AntDesign name="star" size={17} color="black" />
               <Text className="text-sm">Edad: </Text>
@@ -269,7 +273,7 @@ export function Perfil({ navigation }) {
               <Text className="text-lg">{perfil?.client?.age}</Text>
             </View>
           </View>
-          <View className="flex-col" style={{ width: "80%" }}>
+          <View className="flex-col" style={{ width: "80%", marginVertical: 10 }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
               <AntDesign name="star" size={17} color="black" />
               <Text className="text-sm">Nivel: </Text>
@@ -279,7 +283,7 @@ export function Perfil({ navigation }) {
             </View>
           </View>
 
-          <View className="flex-col mb-3" style={{ width: "80%" }}>
+          <View className="flex-col mb-3" style={{ width: "80%", marginVertical: 10 }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
               <AntDesign name="star" size={17} color="black" />
               <Text className="text-sm">Días de entrenamiento: </Text>
@@ -303,8 +307,10 @@ export function Perfil({ navigation }) {
             padding: 10,
           }}
           onPress={cerrarSesion}
+          className="flex-row items-center justify-center"
         >
-          <Text className="text-center"> Cerrar sesión </Text>
+          <Text className="text-center font-bold"> Cerrar sesión </Text>
+          <MaterialCommunityIcons name="location-exit" size={24} color="black" />
         </TouchableOpacity>
       </ScrollView>
     </View>

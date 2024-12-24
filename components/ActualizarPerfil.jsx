@@ -16,6 +16,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { TouchableOpacity } from "react-native";
 import ModalPersonalizado from "../layouts/Modal";
+import Entypo from '@expo/vector-icons/Entypo';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 export function UpdateProfileScreen({ navigation, route }) {
   const insets = useSafeAreaInsets();
@@ -168,12 +170,12 @@ export function UpdateProfileScreen({ navigation, route }) {
           titulo="Mensaje del sistema"
           mensajes={mensajesBack}
         />
-        <View className="items-center justify-center space-y-3 mt-5 mb-5">
+        <View className="items-center justify-center mt-5 mb-5">
           <Text className="text-3xl font-bold text-center ">
             Actualización de perfil
           </Text>
 
-          <View className="flex-col" style={{ width: "80%" }}>
+          <View className="flex-col" style={{ width: "80%" , marginVertical: 10 }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
               <AntDesign name="edit" size={20} color="black" />
               <Text className="text-sm">Nombre: </Text>
@@ -188,7 +190,7 @@ export function UpdateProfileScreen({ navigation, route }) {
             </View>
           </View>
 
-          <View className="flex-col" style={{ width: "80%" }}>
+          <View className="flex-col" style={{ width: "80%", marginVertical: 10 }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
               <AntDesign name="edit" size={20} color="black" />
               <Text className="text-sm">Apellido: </Text>
@@ -205,7 +207,7 @@ export function UpdateProfileScreen({ navigation, route }) {
             </View>
           </View>
 
-          <View className="flex-col" style={{ width: "80%" }}>
+          <View className="flex-col" style={{ width: "80%" , marginVertical: 10 }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
               <AntDesign name="edit" size={20} color="black" />
               <Text className="text-sm">Correo: </Text>
@@ -221,7 +223,7 @@ export function UpdateProfileScreen({ navigation, route }) {
             </View>
           </View>
 
-          <View className="flex-col" style={{ width: "80%" }}>
+          <View className="flex-col" style={{ width: "80%", marginVertical: 10 }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
               <AntDesign name="edit" size={20} color="black" />
               <Text className="text-sm">Género: </Text>
@@ -236,7 +238,7 @@ export function UpdateProfileScreen({ navigation, route }) {
             </View>
           </View>
 
-          <View className="flex-col" style={{ width: "80%" }}>
+          <View className="flex-col" style={{ width: "80%", marginVertical: 10 }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
               <AntDesign name="edit" size={20} color="black" />
               <Text className="text-sm">Peso: </Text>
@@ -252,7 +254,7 @@ export function UpdateProfileScreen({ navigation, route }) {
             </View>
           </View>
 
-          <View className="flex-col" style={{ width: "80%" }}>
+          <View className="flex-col" style={{ width: "80%", marginVertical: 10 }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
               <AntDesign name="edit" size={20} color="black" />
               <Text className="text-sm">Altura: </Text>
@@ -267,7 +269,7 @@ export function UpdateProfileScreen({ navigation, route }) {
             </View>
           </View>
 
-          <View className="flex-col" style={{ width: "80%" }}>
+          <View className="flex-col" style={{ width: "80%", marginVertical: 10 }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
               <AntDesign name="edit" size={20} color="black" />
               <Text className="text-sm">Edad: </Text>
@@ -282,7 +284,7 @@ export function UpdateProfileScreen({ navigation, route }) {
             </View>
           </View>
 
-          <View className="flex-col" style={{ width: "80%" }}>
+          <View className="flex-col" style={{ width: "80%", marginVertical: 10 }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
               <AntDesign name="edit" size={20} color="black" />
               <Text className="text-sm">Nivel de actividad: </Text>
@@ -299,7 +301,7 @@ export function UpdateProfileScreen({ navigation, route }) {
             </View>
           </View>
 
-          <View className="flex-col" style={{ width: "80%" }}>
+          <View className="flex-col" style={{ width: "80%", marginVertical: 10 }}>
             <View className="flex flex-row left-0 items-center w-full space-x-2">
               <AntDesign name="edit" size={20} color="black" />
               <Text className="text-sm">Días de entrenamiento: </Text>
@@ -321,20 +323,26 @@ export function UpdateProfileScreen({ navigation, route }) {
           </View>
           <View className="flex flex-row justify-evenly items-center w-full">
             <TouchableOpacity
-              className="border-2 p-2 rounded-md bg-[#82E5B5]"
+              className="p-2 rounded-md bg-[#82E5B5]"
               onPress={handleSave}
             >
               {loading ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
-                <Text className="text-base text-center">Guardar</Text>
+                <View className="flex-row items-center">
+                  <Text className="mr-2 font-bold">Guardar</Text>
+                  <Entypo name="save" size={20} color="black" />
+                </View>
               )}
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => navigation.goBack()}
-              className="border-2 p-2 rounded-md bg-[#82E5B5]"
+              className=" p-2 rounded-md bg-[#82E5B5]"
             >
-              <Text className="text-base text-center">Cancelar</Text>
+              <View className="flex-row items-center">
+                <Text className="mr-2 font-bold">Cancelar</Text>
+                <MaterialIcons name="close" size={20} color="black" />
+              </View>
             </TouchableOpacity>
           </View>
         </View>

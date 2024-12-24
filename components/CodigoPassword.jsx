@@ -11,10 +11,11 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import React, { useState } from "react";
 import imagenes from "../assets/images.js";
-import { Shadow } from "react-native-shadow-2";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer.jsx";
 import { ConfirmEmailViewModel } from "../models/ConfirmEmailModel";
+import Octicons from '@expo/vector-icons/Octicons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 export function CodigoPassword({ navigation, route }) {
   const insets = useSafeAreaInsets();
@@ -39,7 +40,7 @@ export function CodigoPassword({ navigation, route }) {
 
   return (
     <View
-      style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
+      style={{ paddingBottom: insets.bottom }}
       className="w-full h-full flex-1 bg-white"
     >
       <Header />
@@ -52,14 +53,14 @@ export function CodigoPassword({ navigation, route }) {
           alignItems: "center",
         }}
       >
-        <Shadow
-          className="rounded-xl"
-          distance={15}
-          startColor={"rgba(130, 229, 181, 0.5)"}
-        >
           <View
-            style={{ maxWidth: "80%" }}
-            className="w-64 items-center gap-y-2 flex flex-col mb-5"
+            style={{ maxWidth: "70%",
+              width: "70%",
+              shadowColor: "#00ff82",
+              elevation: 20,
+              backgroundColor: "#fff",
+             }}
+            className="w-64 items-center gap-y-2 flex flex-col mb-5 rounded-2xl p-2"
           >
             <Image
               source={imagenes.loginIcon}
@@ -67,10 +68,13 @@ export function CodigoPassword({ navigation, route }) {
               style={{ resizeMode: "contain" }}
             />
             <Text className="font-extrabold text-2xl text-center">
-              Se envió un código de verificación a su correo
+              Revisa tu correo
             </Text>
             <View style={{ maxWidth: "80%" }} className="w-full gap-y-3">
-              <Text className="">Por favor ingrese el código:</Text>
+              <View className="flex-row items-center">
+                <Octicons name="number" size={24} color="black" />
+                <Text className="ml-2 font-bold">Por favor ingrese el código:</Text>
+              </View>
               <TextInput
                 placeholder="Ingrese su correo"
                 className="border-b-2"
@@ -91,7 +95,10 @@ export function CodigoPassword({ navigation, route }) {
                 {loading ? (
                   <ActivityIndicator color="#fff" size="small" />
                 ) : (
-                  <Text className="">Enviar</Text>
+                  <View className="flex-row items-center">
+                    <Text className="mr-2 font-bold">Enviar</Text>
+                    <MaterialIcons name="verified-user" size={20} color="black" />
+                  </View>
                 )}
               </TouchableOpacity>
               <TouchableOpacity
@@ -102,11 +109,13 @@ export function CodigoPassword({ navigation, route }) {
                   borderRadius: 5,
                 }}
               >
-                <Text className="">Cancelar</Text>
+                <View className="flex-row items-center">
+                  <Text className="mr-2 font-bold">Cancelar</Text>
+                  <MaterialIcons name="close" size={20} color="black" />
+                </View>
               </TouchableOpacity>
             </View>
           </View>
-        </Shadow>
       </ScrollView>
 
       <Footer />

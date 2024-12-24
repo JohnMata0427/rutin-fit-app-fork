@@ -1,122 +1,91 @@
-import { Shadow } from "react-native-shadow-2";
-import { View, Text, Pressable, Linking } from "react-native";
+import { View, Text, Pressable, Linking, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import { useNavigation } from "@react-navigation/native";
 
 const Footer = () => {
+  const navigation = useNavigation();
   return (
-    <Shadow
-      className=""
-      distance={9}
-      startColor={"#00000030"}
-      offset={[10, 0]}
+    <View className="flex-row w-full flex-wrap justify-evenly bg-black"
+    style={{
+      shadowColor: "#000",
+      elevation: 20,
+      shadowOffset: { width: 0, height: -1 },
+      shadowOpacity: 0.5,
+      shadowRadius: 3,
+    }}
     >
-      <View className="flex-row w-full flex-wrap justify-center">
-        <View className="flex-wrap max-w-[175px] flex justify-around">
+      <View className="flex-wrap justify-around gap-2 m-1">
+        <TouchableOpacity
+          onPress={() => navigation.navigate("QuienesSomos")}
+          className="border-2 border-white rounded-xl"
+        >
           <Text className="text-white text-center"> ¿Quienes somos?</Text>
-          <Text className="text-white text-center"> Contáctanos: </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => Linking.openURL("mailto:rutinfit24@gmail.com")}
+          className="border-2 justify-center border-white rounded-xl"
+        >
+          <Text className="text-white font-bold"> Contáctanos: </Text>
+          <Text className="text-white text-center"> rutinfit24@gmail.com </Text>
+        </TouchableOpacity>
+      </View>
+
+      <View className="flex flex-col max-w-[200px]">
+        <Text className="text-center text-white mb-1 flex-wrap">
+          Siguemos en nuestras redes sociales:
+        </Text>
+        <View className="flex flex-row flex-wrap justify-center gap-2">
           <Pressable
-            onPress={() => Linking.openURL("mailto:rutinfit24@gmail.com")}
+            onPress={() =>
+              Linking.openURL("https://www.facebook.com/DustinJMS")
+            }
+          >
+            {({ pressed }) => (
+              <View style={{ opacity: pressed ? 0.5 : 1 }}>
+                <Icon name="logo-facebook" size={30} color={"#ffff"} />
+              </View>
+            )}
+          </Pressable>
+          <Pressable
+            onPress={() => Linking.openURL("")}
             style={({ pressed }) => ({
-              backgroundColor: pressed ? "white" : "transparent",
-              borderColor: "white",
-              borderWidth: 1,
-              borderRadius: 10,
-              padding: 3,
+              opacity: pressed ? 0.5 : 1,
             })}
           >
             {({ pressed }) => (
-              <Text
-                style={{
-                  color: pressed ? "black" : "white",
-                  textAlign: "center",
-                }}
-              >
-                rutinfit24@gmail.com
-              </Text>
+              <View style={{ opacity: pressed ? 0.5 : 1 }}>
+                <Icon name="logo-instagram" size={30} color={"#ffff"} />
+              </View>
+            )}
+          </Pressable>
+          <Pressable
+            onPress={() => Linking.openURL("")}
+            style={({ pressed }) => ({
+              opacity: pressed ? 0.5 : 1,
+            })}
+          >
+            {({ pressed }) => (
+              <View style={{ opacity: pressed ? 0.5 : 1 }}>
+                <Icon name="logo-tiktok" size={30} color={"#ffff"} />
+              </View>
+            )}
+          </Pressable>
+
+          <Pressable
+            onPress={() => Linking.openURL("")}
+            style={({ pressed }) => ({
+              opacity: pressed ? 0.1 : 1,
+            })}
+          >
+            {({ pressed }) => (
+              <View style={{ opacity: pressed ? 0.5 : 1 }}>
+                <Icon name="logo-whatsapp" size={30} color={"#ffff"} />
+              </View>
             )}
           </Pressable>
         </View>
-        <View className="flex flex-col max-w-[200px]">
-          <Text className="text-center text-white mb-1 flex flex-wrap">
-            
-            Siguemos en nuestras redes sociales:
-          </Text>
-          <View className="flex flex-row flex-wrap justify-center gap-2">
-            <Pressable
-              onPress={() =>
-                Linking.openURL("https://www.facebook.com/DustinJMS")
-              }
-            >
-              {({ pressed }) => (
-                <View style={{ opacity: pressed ? 0.5 : 1 }}>
-                  <Icon name="logo-facebook" size={30} color={"#ffff"} />
-                </View>
-              )}
-            </Pressable>
-            <Pressable
-              onPress={() => Linking.openURL("")}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              {({ pressed }) => (
-                <View style={{ opacity: pressed ? 0.5 : 1 }}>
-                  <Icon name="logo-instagram" size={30} color={"#ffff"} />
-                </View>
-              )}
-            </Pressable>
-            <Pressable
-              onPress={() => Linking.openURL("")}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              {({ pressed }) => (
-                <View style={{ opacity: pressed ? 0.5 : 1 }}>
-                  <Icon name="logo-twitter" size={30} color={"#ffff"} />
-                </View>
-              )}
-            </Pressable>
-            <Pressable
-              onPress={() => Linking.openURL("")}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              {({ pressed }) => (
-                <View style={{ opacity: pressed ? 0.5 : 1 }}>
-                  <Icon name="logo-tiktok" size={30} color={"#ffff"} />
-                </View>
-              )}
-            </Pressable>
-            <Pressable
-              onPress={() => Linking.openURL("")}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              {({ pressed }) => (
-                <View style={{ opacity: pressed ? 0.5 : 1 }}>
-                  <Icon name="logo-youtube" size={30} color={"#ffff"} />
-                </View>
-              )}
-            </Pressable>
-            <Pressable
-              onPress={() => Linking.openURL("")}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.1 : 1,
-              })}
-            >
-              {({ pressed }) => (
-                <View style={{ opacity: pressed ? 0.5 : 1 }}>
-                  <Icon name="logo-whatsapp" size={30} color={"#ffff"} />
-                </View>
-              )}
-            </Pressable>
-          </View>
-        </View>
       </View>
-    </Shadow>
+    </View>
   );
 };
 export default Footer;

@@ -1,5 +1,11 @@
-import React, { useEffect } from "react"; 
-import { ActivityIndicator, FlatList, Text, View, RefreshControl } from "react-native";
+import React, { useEffect } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  Text,
+  View,
+  RefreshControl,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { DiasCompletadosViewModel } from "../models/DiasCompletadosViewModel";
 import { useState } from "react";
@@ -8,6 +14,7 @@ import { TouchableOpacity } from "react-native";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { LinearGradient } from "expo-linear-gradient";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 export function Home() {
   const insets = useSafeAreaInsets();
@@ -29,7 +36,7 @@ export function Home() {
       }
     } catch (error) {
       console.log(error);
-    } 
+    }
   };
   useEffect(() => {
     cargarDiasCompletados();
@@ -61,14 +68,17 @@ export function Home() {
           style={{
             maxWidth: "100%",
             position: "relative",
-            flexDirection: "column",
+            flexDirection: "colum",
             justifyContent: "flex-end",
             width: "100%",
             height: 75,
           }}
           className="w-full h-full"
         >
-          <Text className="text-2xl font-medium mb-2"> Progreso diario </Text>
+          <View className="flex-row items-center mb-2">
+            <Text className="text-2xl font-medium"> Progreso diario </Text>
+            <FontAwesome6 name="calendar-days" size={20} color="black" />
+          </View>
         </View>
       </LinearGradient>
       <FlatList
@@ -78,7 +88,10 @@ export function Home() {
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <>
-            <View className="flex-row border-black border-2 justify-evenly rounded-2xl m-2 bg-[#82E5B5]" style={{ padding: 10 , width: "95%" }}>
+            <View
+              className="flex-row border-black border-2 justify-evenly rounded-2xl m-2 bg-[#82E5B5]"
+              style={{ padding: 10, width: "95%" }}
+            >
               <View className="">
                 <View className="flex flex-row items-center justify-between">
                   <Text className="text-black">Día:</Text>
@@ -86,7 +99,9 @@ export function Home() {
                 </View>
                 <View className="flex flex-row items-center justify-between space-x-5">
                   <Text className="text-black">Fecha: </Text>
-                  <Text className="text-black">{new Date(item.date).toLocaleDateString()}</Text>
+                  <Text className="text-black">
+                    {new Date(item.date).toLocaleDateString()}
+                  </Text>
                 </View>
               </View>
               <View className="border"></View>

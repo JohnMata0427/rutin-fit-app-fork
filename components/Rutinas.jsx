@@ -1,4 +1,4 @@
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -8,7 +8,6 @@ import {
   TextInput,
   View,
   RefreshControl,
-  Animated,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { RutinaViewModel } from "../models/RutinaViewModel";
@@ -23,6 +22,7 @@ import { crearProgreso, progreso } from "../services/AuthService";
 import { PerfilViewModel } from "../models/PerfilVewModel";
 import Entypo from "@expo/vector-icons/Entypo";
 
+
 export function Rutinas() {
   const insets = useSafeAreaInsets();
   const { handleRutina } = RutinaViewModel();
@@ -36,6 +36,7 @@ export function Rutinas() {
   const { handlePerfil } = PerfilViewModel();
   const [perfil, setPerfil] = useState({});
   const [loadingProgress, setLoadingProgress] = useState(false);
+  
 
   const [datosProgresso, setDatosProgresso] = useState({
     currentWeight: 0,
@@ -88,9 +89,24 @@ export function Rutinas() {
         }
         if (token) {
           const resultado = await handleRutina(token);
-          setRutinas({ existe: true, routine: resultado.datos.routine });
+          if (resultado) {
+            console.log("Rutinas: ", resultado.datos.routine);
+            await AsyncStorage.setItem("@rutinas", JSON.stringify(resultado.datos.routine));
+            setRutinas({ existe: true, routine: resultado.datos.routine });
+          } else {
+            const rutinasLocales = await AsyncStorage.getItem("@rutinas");
+            if (rutinasLocales) {
+              setRutinas({ existe: true, routine: JSON.parse(rutinasLocales) });
+            } else {
+              Alert.alert(
+                "Sin conexión",
+                "No tienes conexión a internet y no hay rutinas almacenados localmente"
+              );
+            }
+          }
         }
       } catch (error) {
+        Alert.alert("Error", "No se pudo obtener las rutinas");
         console.log(error);
       }
     };
@@ -98,14 +114,14 @@ export function Rutinas() {
   }, [token]);
 
   const refreshData = async () => {
-    setIsRefreshing(true); // Inicia el refresco
+    setIsRefreshing(true); 
     try {
       const resultado = await handleRutina(token);
       setRutinas({ existe: true, routine: resultado.datos.routine });
     } catch (error) {
       console.log(error);
     } finally {
-      setIsRefreshing(false); // Finaliza el refresco
+      setIsRefreshing(false); 
     }
   };
 
@@ -121,13 +137,20 @@ export function Rutinas() {
     }
 
     try {
+      console.log(" Peso: ", datosProgresso.currentWeight);
+      console.log(" Observaciones: ", datosProgresso.observations);
+      
       const resultado = await crearProgreso(
         token,
         datosProgresso.observations,
         datosProgresso.currentWeight
       );
-      setDatosProgresso({ observations: "", currentWeight: "" });
-      Alert.alert("Éxito", "Felicidades, tu progreso ha sido registrado");
+      if (resultado) {
+        Alert.alert("Éxito", "Felicidades, tu progreso ha sido registrado");
+        setDatosProgresso({ observations: "", currentWeight: "" });
+      } else {
+        Alert.alert("Error", "No se pudo registrar el progreso");
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -158,7 +181,10 @@ export function Rutinas() {
           }}
           className="w-full h-full"
         >
-          <Text className="text-2xl font-medium mb-2"> Rutinas Asignadas </Text>
+          <View className="flex-row items-center mb-2">
+            <Text className="text-2xl font-medium mr-2"> Rutinas Asignadas </Text>
+            <AntDesign name="switcher" size={20} color="black" />
+          </View>
         </View>
       </LinearGradient>
       {rutina.routine.length > 0 ? (
@@ -364,6 +390,7 @@ export function Rutinas() {
               numberOfLines={3}
               placeholder="Ingresa tu nuevo peso...."
               className="border-b-2 max-w-full w-full p-2"
+              value={datosProgresso.currentWeight}
               keyboardType="numeric"
               onChangeText={(text) =>
                 setDatosProgresso({ ...datosProgresso, currentWeight: text })
@@ -374,6 +401,7 @@ export function Rutinas() {
               numberOfLines={3}
               placeholder="Escribe aquí tus cambios...."
               className="border-b-2 max-w-full w-full p-2"
+              value={datosProgresso.observations}
               onChangeText={(text) =>
                 setDatosProgresso({ ...datosProgresso, observations: text })
               }

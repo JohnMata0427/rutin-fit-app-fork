@@ -5,6 +5,7 @@ const imagenes = {
     RutinFit: require('../assets/RutinFit.png'),
     registroIcon: require('../assets/RegistroIcon.png'),
     perfil: require("../assets/perfil.jpg"),
-    fondoChat: require("../assets/fondoChat.jpg")
+    fondoChat: require("../assets/fondoChat.jpg"),
+    epn: require("../assets/epn.jpg"),
 }
 export default imagenes;

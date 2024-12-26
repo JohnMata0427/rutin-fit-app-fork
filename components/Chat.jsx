@@ -10,6 +10,7 @@ import Feather from "@expo/vector-icons/Feather";
 import { ChatViewModel } from "../models/ChatViewModel";
 import { PerfilViewModel } from "../models/PerfilVewModel";
 import {AutoScrollFlatList} from "react-native-autoscroll-flatlist";
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 // Initialize socket connection
 const socket = io(`${process.env.EXPO_PUBLIC_BACKEND}`.replace("/api/v1", ""));
@@ -108,7 +109,10 @@ export function Chat() {
     <View style={{ flex: 1, paddingBottom: insets.bottom }}>
         <LinearGradient colors={["#82E5B5", "#4daf6f"]} className="border-b-2 border-black">
           <View style={{ flexDirection: "column", justifyContent: "flex-end", height: 75 }}>
-            <Text className="text-2xl font-medium mb-2">Entrenador</Text>
+            <View className="flex-row items-center mb-2">
+              <Text className="text-2xl font-medium mr-2"> Entrenador </Text>
+              <FontAwesome5 name="user-friends" size={20} color="black" />
+            </View>
           </View>
         </LinearGradient>
 

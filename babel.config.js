@@ -11,9 +11,15 @@ module.exports = function (api) {
         {
           alias: {
             '@': './app',
+            '@/assets': './assets',
           },
         },
       ],
     ],
+    env: {
+      production: {
+        plugins: ['react-native-paper/babel'],
+      },
+    },
   };
 };

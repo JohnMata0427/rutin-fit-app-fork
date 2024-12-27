@@ -6,7 +6,7 @@ import {
 import { Alert } from 'react-native';
 import { requestSaveNotificationToken } from './api-consumption';
 
-export const registerPushNotifications = async (token) => {
+export const registerPushNotifications = async token => {
   try {
     const { status } = await getPermissionsAsync();
 
@@ -29,7 +29,7 @@ export const registerPushNotifications = async (token) => {
   }
 };
 
-export const verificateTokenNotifications = async (token) => {
+export const verificateTokenNotifications = async token => {
   const { status } = await getPermissionsAsync();
   if (status !== 'granted') return;
 

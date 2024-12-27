@@ -2,12 +2,12 @@ import axios from 'axios';
 
 export const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND;
 
-export const requestLogin = async (form) => {
+export const requestLogin = async form => {
   const response = await axios.post(`${BACKEND_URL}/login`, form);
   return response.data;
 };
 
-export const requestRegister = async (form) => {
+export const requestRegister = async form => {
   const response = await axios.post(
     `${BACKEND_URL}/client/only-register`,
     form,
@@ -15,7 +15,7 @@ export const requestRegister = async (form) => {
   return response.data;
 };
 
-export const requestConfirmEmail = async (form) => {
+export const requestConfirmEmail = async form => {
   const response = await axios.post(
     `${BACKEND_URL}/client/confirm-email`,
     form,
@@ -23,7 +23,7 @@ export const requestConfirmEmail = async (form) => {
   return response.data;
 };
 
-export const requestConfigureProfile = async (form) => {
+export const requestConfigureProfile = async form => {
   const response = await axios.post(
     `${BACKEND_URL}/client/configure-profile`,
     form,
@@ -31,7 +31,7 @@ export const requestConfigureProfile = async (form) => {
   return response.data;
 };
 
-export const requestViewCoachs = async (token) => {
+export const requestViewCoachs = async token => {
   const response = await axios.get(`${BACKEND_URL}/coach/view-coachs`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -40,7 +40,7 @@ export const requestViewCoachs = async (token) => {
   return response.data;
 };
 
-export const requestViewProfile = async (token) => {
+export const requestViewProfile = async token => {
   const response = await axios.get(`${BACKEND_URL}/client/view-profile`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -49,7 +49,7 @@ export const requestViewProfile = async (token) => {
   return response.data;
 };
 
-export const requestPasswordRecovery = async (form) => {
+export const requestPasswordRecovery = async form => {
   const response = await axios.post(
     `${BACKEND_URL}/client/forget-password`,
     form,
@@ -57,7 +57,7 @@ export const requestPasswordRecovery = async (form) => {
   return response.data;
 };
 
-export const requestViewRoutine = async (token) => {
+export const requestViewRoutine = async token => {
   const response = await axios.get(`${BACKEND_URL}/client/view-routine`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -66,12 +66,22 @@ export const requestViewRoutine = async (token) => {
   return response.data;
 };
 
-export const requestChat = async (token, client_id, coach_id) => {
+export const requestChat = async (
+  token,
+  client_id,
+  coach_id,
+  page = 1,
+  limit = 50,
+) => {
   const response = await axios.get(
     `${BACKEND_URL}/chats/${client_id}/${coach_id}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
+      },
+      params: {
+        page,
+        limit,
       },
     },
   );
@@ -79,7 +89,7 @@ export const requestChat = async (token, client_id, coach_id) => {
 };
 
 export const requestCheckDay = async (token, day) => {
-  const response = await axios.get(
+  const response = await axios.post(
     `${BACKEND_URL}/client/mark-day-completed`,
     { day },
     {
@@ -91,7 +101,7 @@ export const requestCheckDay = async (token, day) => {
   return response.data;
 };
 
-export const requestViewCompletedDays = async (token) => {
+export const requestViewCompletedDays = async token => {
   const response = await axios.get(
     `${BACKEND_URL}/client/view-completed-days`,
     {
@@ -103,7 +113,7 @@ export const requestViewCompletedDays = async (token) => {
   return response.data;
 };
 
-export const requestUpdateProfile = async (form, token) => {
+export const requestUpdateProfile = async (token, form) => {
   const response = await axios.put(
     `${BACKEND_URL}/client/update-profile`,
     form,
@@ -116,14 +126,14 @@ export const requestUpdateProfile = async (form, token) => {
   return response.data;
 };
 
-export const requestRestorePassword = async (email) => {
+export const requestRestorePassword = async email => {
   const response = await axios.post(`${BACKEND_URL}/client/restore-password`, {
     email,
   });
   return response.data;
 };
 
-export const requestChangePassword = async (form) => {
+export const requestChangePassword = async form => {
   const response = await axios.put(`${BACKEND_URL}/client/new-password`, form);
   return response.data;
 };

@@ -4,11 +4,8 @@ import { ErrorModal } from '@/components/modals/ErrorModal';
 import { useLogin } from '@/models/useLogin';
 import { useProfile } from '@/models/useProfile';
 import { registerPushNotifications } from '@/services/notifications';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useState } from 'react';
+import { AntDesign, FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import { useContext, useState } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -23,12 +20,15 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LoginIcon from '../../assets/LoginIcon.png';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../contexts/AuthProvider';
 
 export function Login({ navigation }) {
   const insets = useSafeAreaInsets();
   const { handleProfile } = useProfile();
   const { handleLogin, setModalVisible, modalVisible, messages, loading } =
     useLogin();
+  const { setToken, setAuth } = useContext(AuthContext);
 
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
@@ -39,34 +39,36 @@ export function Login({ navigation }) {
   const handleLoginPress = async () => {
     const token = await handleLogin(form);
     if (token) {
-      const profile = await handleProfile(token);
+      try {
+        await AsyncStorage.setItem('@auth_token', token);
+        setToken(token);
 
-      await AsyncStorage.setItem('@auth_token', token);
-      profile &&
-        (await AsyncStorage.setItem('@profile', JSON.stringify(profile)));
+        const profile = await handleProfile(token);
 
-      await registerPushNotifications(token);
-      navigation.navigate(profile ? 'Main' : 'Datos');
+        if (profile) {
+          await AsyncStorage.setItem('@profile', JSON.stringify(profile));
+          setAuth(profile);
+        }
+        
+        navigation.navigate(profile ? 'Main' : 'Datos');
+        await registerPushNotifications(token);
+      } catch (error){ console.log(error)}
     }
   };
 
   return (
     <View
       style={{ paddingTop: insets.top }}
-      className="flex-col h-full justify-between"
+      className="h-full flex-col justify-between"
     >
       <AuthHeader />
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' && 'padding'}>
         <View
           style={{ shadowColor: '#00ff82', elevation: 20 }}
-          className="items-center gap-y-4 my-5 w-4/5 mx-auto border-[#82E5B5] p-10"
+          className="mx-auto my-5 w-4/5 items-center gap-y-4 border-primary p-10"
         >
-          <Image
-            source={LoginIcon}
-            className="size-28"
-            style={{ resizeMode: 'contain' }}
-          />
-          <Text className="font-extrabold text-4xl">Login</Text>
+          <Image source={LoginIcon} className="size-28" resizeMode="contain" />
+          <Text className="text-4xl font-extrabold">Login</Text>
           <View className="gap-y-2">
             <View className="flex-row items-center gap-x-2">
               <FontAwesome name="user-circle" size={20} color="black" />
@@ -76,7 +78,7 @@ export function Login({ navigation }) {
               placeholder="Ingrese su usuario"
               className="border-b-2"
               value={form.email}
-              onChangeText={(value) => setForm({ ...form, email: value })}
+              onChangeText={value => setForm({ ...form, email: value })}
               autoCapitalize="none"
             />
             <View className="flex-row items-center gap-x-2">
@@ -89,17 +91,17 @@ export function Login({ navigation }) {
                 className="border-b-2"
                 secureTextEntry={!showPassword}
                 value={form.password}
-                onChangeText={(value) => setForm({ ...form, password: value })}
+                onChangeText={value => setForm({ ...form, password: value })}
               />
               <TouchableOpacity
-                className="absolute top-2 right-2"
+                className="absolute right-2 top-2"
                 onPress={() => setShowPassword(!showPassword)}
               >
                 <Icon name={showPassword ? 'eye' : 'eye-off'} size={24} />
               </TouchableOpacity>
             </View>
             <Pressable
-              className="bg-[#82E5B5] p-2.5 rounded-md"
+              className="rounded-md bg-primary p-2.5"
               onPress={handleLoginPress}
               disabled={loading}
             >
@@ -107,7 +109,7 @@ export function Login({ navigation }) {
                 <ActivityIndicator color="#fff" size="small" />
               ) : (
                 <View className="flex-row items-center justify-center">
-                  <Text className="font-bold mx-2">Iniciar Sesión</Text>
+                  <Text className="mx-2 font-bold">Iniciar Sesión</Text>
                   <AntDesign name="login" size={20} color="black" />
                 </View>
               )}
@@ -126,7 +128,7 @@ export function Login({ navigation }) {
                 >
                   {({ pressed }) => (
                     <Text
-                      className={pressed ? 'text-[#219B05]' : 'text-[#82E5B5]'}
+                      className={pressed ? 'text-[#219B05]' : 'text-primary'}
                     >
                       Recupérala aquí
                     </Text>
@@ -138,7 +140,7 @@ export function Login({ navigation }) {
                 <Pressable onPress={() => navigation.navigate('Registro')}>
                   {({ pressed }) => (
                     <Text
-                      className={pressed ? 'text-[#219B05]' : 'text-[#82E5B5]'}
+                      className={pressed ? 'text-[#219B05]' : 'text-primary'}
                     >
                       Regístrate aquí
                     </Text>

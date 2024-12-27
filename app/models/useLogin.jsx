@@ -6,18 +6,14 @@ export function useLogin() {
   const [modalVisible, setModalVisible] = useState(false);
   const [messages, setMessages] = useState([]);
 
-  const handleLogin = async (form) => {
+  const handleLogin = async form => {
     setLoading(true);
     try {
       const { token } = await requestLogin(form);
       return token;
     } catch ({ response: { data } }) {
-      if (data?.errors) {
-        const errors = data.errors.map(({ msg }) => msg);
-        setMessages(errors);
-      } else if (data?.res) {
-        setMessages([data.res]);
-      }
+      const errors = data?.errors?.map(({ msg }) => msg);
+      setMessages(errors ?? [data?.res]);
       setModalVisible(true);
     } finally {
       setLoading(false);

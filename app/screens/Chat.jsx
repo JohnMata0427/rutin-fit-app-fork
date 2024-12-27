@@ -3,6 +3,7 @@ import { useChat } from '@/models/useChat';
 import { BACKEND_URL } from '@/services/api-consumption';
 import { Feather, FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { formatDateToEC } from '@/utils/utils';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import {
   FlatList,
@@ -46,6 +47,36 @@ export function Chat() {
     setNewMessage('');
   }, [newMessage]);
 
+  const renderMessage = useCallback(
+    ({ item, index }) => {
+      const mySelf = item.transmitter === auth?._id;
+      const again = messages[index - 1]?.transmitter !== item.transmitter;
+      const date = new Date(item.createdAt);
+
+      const isDifferentDay =
+        date.toLocaleDateString() !==
+        new Date(messages[index - 1]?.createdAt).toLocaleDateString();
+
+      const formattedDate = formatDateToEC(date);
+
+      return (
+        <>
+          {isDifferentDay && (
+            <Text className="my-4 p-1 text-center">{formattedDate}</Text>
+          )}
+          <Message
+            index={index}
+            item={item}
+            mySelf={mySelf}
+            again={again}
+            isDifferentDay={isDifferentDay}
+          />
+        </>
+      );
+    },
+    [messages, auth],
+  );
+
   useEffect(() => {
     auth &&
       (async () => {
@@ -53,15 +84,15 @@ export function Chat() {
         const coach_id = auth.coach_id._id;
         socket.emit('join', client_id);
         const response = await handleChat(token, client_id, coach_id);
-        setMessages(response);
+        response && setMessages(response);
       })();
 
-    socket.on('receive', (message) => {
-      setMessages((state) => [...state, message]);
+    socket.on('receive', message => {
+      setMessages(state => [...state, message]);
     });
 
     return () => socket.off('receive');
-  }, [auth]);
+  }, [token]);
 
   useEffect(() => {
     messages?.length > 0 && flatListRef.current.scrollToEnd({ animated: true });
@@ -71,7 +102,7 @@ export function Chat() {
     <View className="h-full">
       <LinearGradient
         colors={['#82E5B5', '#4DAF6F']}
-        className="flex-row justify-center items-end h-24 pb-4 gap-x-2"
+        className="h-24 flex-row items-end justify-center gap-x-2 pb-4"
       >
         <Text className="text-2xl font-medium">Chatea con tu Entrenador</Text>
         <FontAwesome5 name="user-friends" size={20} color="black" />
@@ -81,19 +112,21 @@ export function Chat() {
         className="flex-1"
         behavior={Platform.OS === 'ios' && 'padding'}
       >
-        <FlatList
-          ref={flatListRef}
-          data={messages}
-          keyExtractor={(_, index) => index}
-          renderItem={({ item }) => (
-            <Message item={item} transmitter={auth?._id} />
-          )}
-        />
+        {messages.length > 0 ? (
+          <FlatList
+            ref={flatListRef}
+            data={messages}
+            keyExtractor={(_, index) => index}
+            renderItem={renderMessage}
+          />
+        ) : (
+          <View className="flex-1"></View>
+        )}
 
         <View className="flex-row border-t-2 bg-white">
           <TextInput
             multiline
-            className="border-r-2 p-3 w-3/4"
+            className="w-3/4 border-r-2 p-3"
             value={newMessage}
             onChangeText={setNewMessage}
             placeholder="Escribe tu mensaje..."
@@ -101,17 +134,13 @@ export function Chat() {
           {connected ? (
             <TouchableOpacity
               onPress={sendNewMessage}
-              style={{ width: '25%' }}
-              className="flex-row justify-center items-center bg-[#82E5B5] gap-x-2"
+              className="w-1/4 flex-row items-center justify-center gap-x-2 bg-primary"
             >
               <Text>Enviar</Text>
-              <Ionicons name="send" size={20} color="black" />
+              <Ionicons name="send" size={16} color="black" />
             </TouchableOpacity>
           ) : (
-            <View
-              style={{ width: '25%' }}
-              className="justify-center items-center"
-            >
+            <View className="w-1/4 items-center justify-center">
               <Feather name="wifi-off" size={24} color="black" />
             </View>
           )}
@@ -121,34 +150,35 @@ export function Chat() {
   );
 }
 
-function Message({ item, transmitter }) {
-  const dateMessage = new Date(item.createdAt);
-  const mySelf = item.transmitter === transmitter;
+function Message({ item, mySelf, again, isDifferentDay }) {
+  const { name, message, createdAt } = item;
 
   return (
-    <View className={`${mySelf ? 'self-end' : 'self-start'} mt-2`}>
-      <Text
-        className={`font-bold ${mySelf ? 'self-end pr-2' : 'self-start pl-2'}`}
-      >
-        {item.name}
-      </Text>
+    <View className={mySelf ? 'self-end' : 'self-start'}>
+      {(again || isDifferentDay) && (
+        <Text
+          className={`mt-1 font-bold ${
+            mySelf ? 'self-end pr-2' : 'self-start pl-2'
+          }`}
+        >
+          {name}
+        </Text>
+      )}
       <View
-        className={`p-2 m-2 rounded-lg ${
-          mySelf ? 'bg-[#82E5B5] self-end' : 'bg-white self-start'
+        className={`relative mb-1 min-w-10 rounded-lg pb-4 pl-2 pt-2 ${
+          mySelf
+            ? 'mr-3 self-end bg-primary pr-2'
+            : 'ml-3 self-start bg-white pr-9'
         }`}
       >
-        <Text className="text-base">{item.message}</Text>
-      </View>
-      <Text
-        className={`${mySelf ? 'self-end pr-2' : 'self-start pl-2'} text-xs`}
-      >
-        {dateMessage.toLocaleDateString() +
-          '   ' +
-          dateMessage.toLocaleTimeString([], {
+        <Text className="absolute bottom-0.5 right-1.5 text-xs">
+          {new Date(createdAt).toLocaleTimeString([], {
             hour: '2-digit',
             minute: '2-digit',
           })}
-      </Text>
+        </Text>
+        <Text className={mySelf ? 'self-end' : 'self-start'}>{message}</Text>
+      </View>
     </View>
   );
 }

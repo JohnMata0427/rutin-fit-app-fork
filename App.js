@@ -4,12 +4,13 @@ import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { verificateTokenNotifications } from './app/services/notifications';
-import { AuthProvider } from './app/contexts/AuthProvider';
+import { verificateTokenNotifications } from '@/services/notifications';
+import { AuthProvider } from '@/contexts/AuthProvider';
 import { StatusBar } from 'expo-status-bar';
-import { TabNavigator } from './app/layouts/TabNavigator';
-import { QuienesSomos } from './app/screens/QuienesSomos';
-import { Login } from './app/screens/Login';
+import { TabNavigator } from '@/layouts/TabNavigator';
+import { QuienesSomos } from '@/screens/QuienesSomos';
+import { Login } from '@/screens/Login';
+import { UpdateProfile } from '@/screens/UpdateProfile';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +41,7 @@ export default function App() {
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Main" component={TabNavigator} />
             <Stack.Screen name="QuienesSomos" component={QuienesSomos} />
+            <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
           </Stack.Navigator>
         </NavigationContainer>
       </AuthProvider>

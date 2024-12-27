@@ -5,22 +5,10 @@ import RutinFit from '../../assets/RutinFit.png';
 
 export function AuthHeader() {
   return (
-    <View className="flex-row justify-around h-20 border-b-2 border-x-2 rounded-b-xl">
-      <Image
-        source={IconMujer}
-        className="h-full"
-        style={{ resizeMode: 'contain' }}
-      />
-      <Image
-        source={RutinFit}
-        className="w-32 h-full"
-        style={{ resizeMode: 'contain' }}
-      />
-      <Image
-        source={IconHombre}
-        className="h-full"
-        style={{ resizeMode: 'contain' }}
-      />
+    <View className="h-20 flex-row justify-around rounded-b-xl border-x-2 border-b-2">
+      <Image source={IconMujer} className="h-full" resizeMode="contain" />
+      <Image source={RutinFit} className="h-full w-32" resizeMode="contain" />
+      <Image source={IconHombre} className="h-full" resizeMode="contain" />
     </View>
   );
 }

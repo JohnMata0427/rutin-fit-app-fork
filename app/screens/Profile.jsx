@@ -1,12 +1,12 @@
 import { AuthContext } from '@/contexts/AuthProvider';
 import { useProfile } from '@/models/useProfile';
 import { registerPushNotifications } from '@/services/notifications';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { getPermissionsAsync } from 'expo-notifications';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { capitalize, orderOfDays } from '@/utils/utils';
+import { useContext, useEffect, useState } from 'react';
 import {
   Alert,
   Image,
@@ -24,30 +24,20 @@ export function Profile({ navigation }) {
   const { auth, token, setAuth } = useContext(AuthContext);
   const [sendNotification, setSendNotification] = useState(false);
   const [refresh, setRefresh] = useState(false);
-  const orderOfDays = [
-    'lunes',
-    'martes',
-    'miercoles',
-    'jueves',
-    'viernes',
-    'sabado',
-    'domingo',
-  ];
 
-  const handleChangeNotification = async (send) => {
+  const handleChangeNotification = async send => {
     setSendNotification(send);
     if (!sendNotification) await registerPushNotifications();
   };
 
-  const capitalize = useCallback(
-    (string) => string?.charAt(0).toUpperCase() + string?.slice(1)
-  );
-
   const refreshProfile = async () => {
     setRefresh(true);
-    const profile = await handleProfile(token);
-    profile && setAuth(profile);
-    setRefresh(false);
+    try {
+      const profile = await handleProfile(token);
+      profile && setAuth(profile);
+    } finally {
+      setRefresh(false);
+    }
   };
 
   const requestLogout = () => {
@@ -76,42 +66,34 @@ export function Profile({ navigation }) {
     <View className="h-full">
       <LinearGradient
         colors={['#82E5B5', '#4DAF6F']}
-        style={{
-          height: 200,
-        }}
-        className="justify-end items-center pb-2"
+        className="h-52 items-center justify-end pb-2"
       >
         <Image
           source={Perfil}
-          style={{
-            width: 150,
-            height: 150,
-            backgroundColor: '#ffff',
-            borderRadius: 9999,
-            resizeMode: 'contain',
-          }}
+          className="size-36 rounded-full bg-white"
+          resizeMode="contain"
         />
       </LinearGradient>
       <ScrollView
-        className="flex-1 m-2"
+        className="m-2 flex-1"
         contentContainerStyle={{ justifyContent: 'center' }}
         refreshControl={
           <RefreshControl refreshing={refresh} onRefresh={refreshProfile} />
         }
       >
         <View className="items-center">
-          <View className="flex-row items-center w-full justify-evenly mb-3">
+          <View className="mb-3 w-full flex-row items-center justify-evenly">
             <TouchableOpacity
               onPress={() => navigation.navigate('UpdateProfile')}
               className="flex-row items-center gap-x-2"
             >
-              <Text className="text-3xl font-bold text-center">
+              <Text className="text-center text-xl font-bold">
                 Editar Perfil
               </Text>
-              <AntDesign name="edit" size={25} color="black" />
+              <AntDesign name="edit" size={24} color="black" />
             </TouchableOpacity>
             <View className="flex-row items-center">
-              <Text className="font-bold">Notificaciones: </Text>
+              <Text className="text-xl font-bold">Notificaciones: </Text>
               <Switch
                 value={sendNotification}
                 onValueChange={handleChangeNotification}
@@ -133,17 +115,13 @@ export function Profile({ navigation }) {
             title="Días de entrenamiento:"
             value={auth?.days
               ?.sort((a, b) => orderOfDays.indexOf(a) - orderOfDays.indexOf(b))
-              .map((day) => capitalize(day))
+              .map(day => capitalize(day))
               .join(' - ')}
           />
         </View>
         <TouchableOpacity
-          style={{
-            backgroundColor: '#82E5B5',
-            padding: 10,
-          }}
           onPress={requestLogout}
-          className="flex-row items-center justify-center gap-x-2"
+          className="flex-row items-center justify-center gap-x-2 rounded-xl bg-primary p-2"
         >
           <Text className="font-bold"> Cerrar sesión </Text>
           <MaterialCommunityIcons
@@ -159,13 +137,13 @@ export function Profile({ navigation }) {
 
 function Field({ title, value }) {
   return (
-    <View className="flex-col w-3/4 m-3">
-      <View className="flex-row gap-x-2 items-center">
+    <View className="m-3 w-3/4 flex-col">
+      <View className="flex-row items-center gap-x-2">
         <AntDesign name="star" size={17} color="black" />
         <Text className="text-sm font-bold">{title}</Text>
       </View>
-      <View className="border-b-2 border-b-[#82E5B5] rounded-b-2xl">
-        <Text className="text-lg text-center">{value}</Text>
+      <View className="rounded-b-2xl border-b-2 border-b-primary">
+        <Text className="text-center text-lg">{value}</Text>
       </View>
     </View>
   );

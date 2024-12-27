@@ -19,17 +19,22 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     (async () => {
       const token = await AsyncStorage.getItem('@auth_token');
-      const saved_profile = await AsyncStorage.getItem('@profile');
 
-      const profile = connected && (await handleProfile(token));
-
+      let profile = {};
+      try {
+        profile = connected && (await handleProfile(token));
+      } catch {
+        const saved_profile = await AsyncStorage.getItem('@profile');
+        profile = JSON.parse(saved_profile);
+      }
+      
+      setAuth(profile);
       setToken(token);
-      setAuth(profile ?? JSON.parse(saved_profile));
     })();
   }, [connected]);
 
   return (
-    <AuthContext.Provider value={{ auth, token, connected, setAuth }}>
+    <AuthContext.Provider value={{ auth, token, connected, setAuth, setToken }}>
       {children}
     </AuthContext.Provider>
   );

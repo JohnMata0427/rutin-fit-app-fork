@@ -1,13 +1,11 @@
 import { AuthContext } from '@/contexts/AuthProvider';
 import { useCompletedDays } from '@/models/useCompletedDays';
-import { Ionicons } from '@expo/vector-icons';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { Ionicons, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useContext, useEffect, useState } from 'react';
 import { FlatList, RefreshControl, Text, View } from 'react-native';
 
-export function Home() {
+export function Progress() {
   const { handleCompletedDays } = useCompletedDays();
   const { token } = useContext(AuthContext);
 
@@ -27,7 +25,7 @@ export function Home() {
     <View className="h-full">
       <LinearGradient
         colors={['#82E5B5', '#4DAF6F']}
-        className="flex-row justify-center items-end h-24 pb-4 gap-x-2"
+        className="h-24 flex-row items-end justify-center gap-x-2 pb-4"
       >
         <Text className="text-2xl font-medium">Progreso Diario</Text>
         <FontAwesome6 name="calendar-days" size={20} color="black" />
@@ -37,7 +35,7 @@ export function Home() {
         contentContainerStyle={{ alignItems: 'center' }}
         keyExtractor={({ _id }) => _id}
         renderItem={({ item: { day, date } }) => (
-          <View className="flex-row border-black border-2 justify-evenly rounded-2xl mt-4 bg-[#82E5B5] p-2 w-4/5">
+          <View className="mt-4 w-4/5 flex-row justify-evenly rounded-2xl border-2 border-black bg-primary p-2">
             <View>
               <Text>Día: {day}</Text>
               <Text>Fecha: {new Date(date).toLocaleDateString()}</Text>

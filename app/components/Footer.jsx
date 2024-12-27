@@ -3,24 +3,24 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 export function Footer({ navigation }) {
   return (
-    <View className="flex-row justify-evenly items-center bg-black p-2">
+    <View className="flex-row items-center justify-evenly bg-black p-2">
       <View className="gap-2">
         <TouchableOpacity
           onPress={() => navigation.navigate('QuienesSomos')}
-          className="p-1 border-2 border-white rounded-xl"
+          className="rounded-xl border-2 border-white p-1"
         >
-          <Text className="text-white text-center">¿Quienes somos?</Text>
+          <Text className="text-center text-white">¿Quienes somos?</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => Linking.openURL('mailto:rutinfit24@gmail.com')}
-          className="p-1 border-2 border-white rounded-xl"
+          className="rounded-xl border-2 border-white p-1"
         >
-          <Text className="text-white font-bold text-center">Contáctanos:</Text>
-          <Text className="text-white mx-2">rutinfit24@gmail.com</Text>
+          <Text className="text-center font-bold text-white">Contáctanos:</Text>
+          <Text className="mx-2 text-white">rutinfit24@gmail.com</Text>
         </TouchableOpacity>
       </View>
 
-      <View className="flex-col w-1/2 gap-2">
+      <View className="w-1/2 flex-col gap-2">
         <Text className="text-center text-white">
           Siguemos en nuestras redes sociales:
         </Text>

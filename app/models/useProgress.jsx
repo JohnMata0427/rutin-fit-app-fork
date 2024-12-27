@@ -2,19 +2,22 @@ import { requestCreateProgress } from '@/services/api-consumption';
 import { useState } from 'react';
 
 export function useProgress() {
-  const [loading, setLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(false);
 
   const handleProgress = async (token, form) => {
+    setLoadingProgress(true);
     try {
-      const data = await requestCreateProgress(token, form);
-      return data;
+      const { res } = await requestCreateProgress(token, form);
+      return res;
+    } catch ({ response: { data } }) {
+      return data?.res ?? 'Error al resgistrar el progreso, intente de nuevo';
     } finally {
-      setLoading(false);
+      setLoadingProgress(false);
     }
   };
 
   return {
-    loading,
+    loadingProgress,
     handleProgress,
   };
 }

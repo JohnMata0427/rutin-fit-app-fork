@@ -1,10 +1,10 @@
 import { requestChat } from '@/services/api-consumption';
 
 export function useChat() {
-  const handleChat = async (token, client_id, coach_id) => {
+  const handleChat = async (token, client_id, coach_id, page) => {
     try {
-      const data = await requestChat(token, client_id, coach_id);
-      return data;
+      const { chat } = await requestChat(token, client_id, coach_id, page);
+      return chat;
     } catch {}
   };
 

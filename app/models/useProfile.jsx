@@ -1,13 +1,24 @@
 import { useState } from 'react';
-import { requestViewProfile } from '@/services/api-consumption';
+import {
+  requestViewProfile,
+  requestUpdateProfile,
+} from '@/services/api-consumption';
 
 export function useProfile() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const handleProfile = async (token) => {
+  const handleProfile = async token => {
+    const { client } = await requestViewProfile(token);
+    return client;
+  };
+
+  const handleUpdateProfile = async (token, form) => {
+    setLoading(true);
     try {
-      const { client } = await requestViewProfile(token);
-      return client;
+      const data = await requestUpdateProfile(token, form);
+      return data;
+    } catch (error) {
+      console.log(error.response.data);
     } finally {
       setLoading(false);
     }
@@ -15,6 +26,7 @@ export function useProfile() {
 
   return {
     handleProfile,
+    handleUpdateProfile,
     loading,
   };
 }

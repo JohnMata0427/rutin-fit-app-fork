@@ -1,15 +1,14 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import EPN from '../../assets/epn.jpg';
 
 export function QuienesSomos({ navigation }) {
   return (
-    <View className="bg-slate-300 flex-1">
-      <View className="flex-row mt-10 items-center border-b-2 p-2 gap-x-2">
+    <View className="flex-1 bg-slate-300">
+      <View className="mt-10 flex-row items-center gap-x-2 border-b-2 p-2">
         <TouchableOpacity
           onPress={() => navigation.navigate('Login')}
-          className="border-2 rounded-xl flex-row items-center py-1 px-2 gap-x-2"
+          className="flex-row items-center gap-x-2 rounded-xl border-2 px-2 py-1"
         >
           <Ionicons name="arrow-back-circle" size={20} color="black" />
           <Text className="text-center">Volver</Text>
@@ -30,8 +29,8 @@ export function QuienesSomos({ navigation }) {
           </Text>
           <Image
             source={EPN}
-            className="bg-black w-96 my-4 mx-auto"
-            style={{ resizeMode: 'fit' }}
+            className="mx-auto my-4 w-96 bg-black"
+            resizeMode="contain"
           />
           <Text className="text-center">
             Nací el 19 de Marzo del 2004 en la cuidad de Quito, Ecuador. He
@@ -39,10 +38,10 @@ export function QuienesSomos({ navigation }) {
             proyecto móvil, el cual fue realizado con el propósito de ayudar a
             las personas a tener un control sobre su condición física y mental.
           </Text>
-          <Text className="text-xl font-bold text-center mt-4">
+          <Text className="mt-4 text-center text-xl font-bold">
             Contáctame:
           </Text>
-          <View className="flex-row p-3 justify-center">
+          <View className="flex-row justify-center p-3">
             <TouchableOpacity className="items-center gap-y-2">
               <Text> Facebook </Text>
               <Ionicons name="logo-facebook" size={24} color="black" />

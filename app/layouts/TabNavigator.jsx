@@ -1,5 +1,5 @@
 import { Chat } from '@/screens/Chat';
-import { Home } from '@/screens/Home';
+import { Progress } from '@/screens/Progress';
 import { Profile } from '@/screens/Profile';
 import { Routines } from '@/screens/Routines';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -10,16 +10,17 @@ const Tab = createBottomTabNavigator();
 export function TabNavigator() {
   return (
     <Tab.Navigator
+      initialRouteName="Rutinas"
       screenOptions={({ route: { name } }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           const icon =
-            name === 'Home'
-              ? 'home'
+            name === 'Progreso'
+              ? 'barbell'
               : name === 'Perfil'
-              ? 'person'
-              : name === 'Chat'
-              ? 'chatbox-ellipses'
-              : 'fitness';
+                ? 'person'
+                : name === 'Chat'
+                  ? 'chatbox-ellipses'
+                  : 'fitness';
 
           const iconFullName = focused ? icon : `${icon}-outline`;
 
@@ -30,8 +31,8 @@ export function TabNavigator() {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Rutinas" component={Routines} />
+      <Tab.Screen name="Progreso" component={Progress} />
       <Tab.Screen name="Chat" component={Chat} />
       <Tab.Screen name="Perfil" component={Profile} />
     </Tab.Navigator>

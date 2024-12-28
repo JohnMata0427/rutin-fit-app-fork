@@ -20,7 +20,7 @@ export function PasswordField({ value, onChangeText }) {
           onChangeText={onChangeText}
         />
         <TouchableOpacity
-          className="absolute right-2 top-2"
+          className="absolute right-2 inset-y-0"
           onPress={() => setShowPassword(!showPassword)}
         >
           <MaterialCommunityIcons

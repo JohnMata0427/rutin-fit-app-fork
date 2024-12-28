@@ -6,7 +6,7 @@ import { PasswordField } from '@/components/PasswordField';
 import { AuthContext } from '@/contexts/AuthProvider';
 import { useLogin } from '@/models/useLogin';
 import { useProfile } from '@/models/useProfile';
-import LoginIcon from '@assets/LoginIcon.png';
+import LoginIcon from '@assets/loginIcon.png';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useContext, useState } from 'react';
@@ -47,12 +47,13 @@ export function Login({ navigation }) {
       contentContainerStyle={{
         justifyContent: 'space-between',
         flexGrow: 1,
+        backgroundColor: 'white',
       }}
     >
       <AuthHeader />
       <View
-        style={{ shadowColor: '#00ff82', elevation: 20 }}
-        className="mx-auto w-4/5 items-center gap-y-4 border-primary py-10"
+        style={{ shadowColor: '#00ff82', elevation: 20 , shadowRadius: 10 }}
+        className="mx-auto w-4/5 items-center gap-y-4 border-primary py-10 rounded-3xl bg-white"
       >
         <Image source={LoginIcon} className="size-28" resizeMode="contain" />
         <Text className="text-3xl font-extrabold">Login</Text>
@@ -90,7 +91,7 @@ export function Login({ navigation }) {
             messages={messages}
           />
           <View className="m-2 gap-y-1">
-            <View className="flex-row justify-center gap-x-1">
+            <View className="flex-row justify-center gap-x-1 flex-wrap">
               <Text>¿Olvidaste tu contraseña? </Text>
               <TouchableOpacity
                 onPress={() => navigation.navigate('ForgotPassword')}
@@ -98,7 +99,7 @@ export function Login({ navigation }) {
                 <Text className="text-primary">Recupérala aquí</Text>
               </TouchableOpacity>
             </View>
-            <View className="flex-row justify-center gap-x-1">
+            <View className="flex-row justify-center gap-x-1 flex-wrap">
               <Text> ¿No tienes cuenta? </Text>
               <TouchableOpacity onPress={() => navigation.navigate('Register')}>
                 <Text className="text-primary">Regístrate aquí</Text>

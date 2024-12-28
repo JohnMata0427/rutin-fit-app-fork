@@ -68,7 +68,7 @@ export function Routines() {
   }, [token, refresh]);
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 bg-white">
       <LinearGradient
         colors={['#82E5B5', '#4DAF6F']}
         className="h-24 flex-row items-end justify-center gap-x-2 pb-4"
@@ -234,7 +234,7 @@ export function Routines() {
               </List.Accordion>
             ),
           )}
-          <View className="my-2 rounded-xl border p-3">
+          <View className="my-2 rounded-xl border p-3 gap-y-3">
             <Text className="text-xl font-bold">
               ¿Has sentido algún progreso?
             </Text>
@@ -246,7 +246,7 @@ export function Routines() {
             <Text>Puedes agregar tus cambios aquí:</Text>
             <TextInput
               placeholder="Ingresa tu nuevo peso...."
-              className="border-b-2 border-primary p-2"
+              className="border-b-2 border-primary p-2 mb-2"
               value={progress.currentWeight}
               keyboardType="numeric"
               onChangeText={value =>

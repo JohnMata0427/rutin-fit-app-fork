@@ -169,7 +169,7 @@ function Message({ item, mySelf, again, isDifferentDay }) {
         </Text>
       )}
       <View
-        className={`relative mb-1 min-w-10 rounded-lg pb-4 pl-2 pt-2 ${
+        className={`relative mb-1 min-w-20 rounded-lg pb-4 pl-2 pt-2 ${
           mySelf
             ? 'mr-3 self-end bg-primary pr-2'
             : 'ml-3 self-start bg-white pr-9'

@@ -36,6 +36,9 @@ export function Progress() {
         />
       </LinearGradient>
       <Image className="h-56 w-full" source={FondoProgreso} />
+      <Text className="text-center font-bold border-2 border-primary p-2 m-4 rounded-lg">
+      No importa dónde entrenes, lo que importa es la determinación con la que lo haces. Cada gota de sudor es un paso más hacia la mejor versión de ti mismo. ¡Nunca te rindas! 💪🔥
+      </Text>
       <FlatList
         data={completedDays}
         contentContainerStyle={{ alignItems: 'center' }}

@@ -40,12 +40,13 @@ export function Register({ navigation }) {
       contentContainerStyle={{
         justifyContent: 'space-between',
         flexGrow: 1,
+        backgroundColor: 'white',
       }}
     >
       <AuthHeader />
       <View
         style={{ shadowColor: '#00ff82', elevation: 20 }}
-        className="mx-auto my-5 w-4/5 items-center gap-y-4 border-primary py-10"
+        className="mx-auto my-5 w-4/5 items-center gap-y-4 border-primary py-10 bg-white rounded-3xl"
       >
         <Image
           source={RegistroIcon}
@@ -105,7 +106,7 @@ export function Register({ navigation }) {
             title="Mensaje del sistema"
             messages={messages}
           />
-          <View className="ustify-center flex-row">
+          <View className="ustify-center flex-row flex-wrap justify-center">
             <Text> ¿Ya tienes una cuenta? </Text>
             <Pressable onPress={() => navigation.navigate('Login')}>
               {({ pressed }) => (

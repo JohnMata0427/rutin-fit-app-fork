@@ -3,7 +3,7 @@ import { Footer } from '@/components/Footer';
 import { InputField } from '@/components/InputField';
 import { VerificateCodeModal } from '@/components/modals/VerificateCodeModal';
 import { useRecoveryPassword } from '@/models/useRecoveryPassword';
-import LoginIcon from '@assets/LoginIcon.png';
+import LoginIcon from '@assets/loginIcon.png';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useState } from 'react';
 import {
@@ -35,12 +35,13 @@ export function ForgotPassword({ navigation }) {
       contentContainerStyle={{
         justifyContent: 'space-between',
         flexGrow: 1,
+        backgroundColor: 'white',
       }}
     >
       <AuthHeader />
       <View
         style={{ shadowColor: '#00ff82', elevation: 20 }}
-        className="mx-auto w-4/5 items-center gap-y-4 border-primary py-10"
+        className="mx-auto w-4/5 items-center gap-y-4 border-primary py-10 bg-white rounded-3xl"
       >
         <Image source={LoginIcon} className="size-28" resizeMode="contain" />
         <Text className="text-2xl font-extrabold">Recuperar Contraseña</Text>

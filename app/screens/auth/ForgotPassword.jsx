@@ -3,7 +3,7 @@ import { Footer } from '@/components/Footer';
 import { InputField } from '@/components/InputField';
 import { VerificateCodeModal } from '@/components/modals/VerificateCodeModal';
 import { useRecoveryPassword } from '@/models/useRecoveryPassword';
-import LoginIcon from '@assets/loginIcon.png';
+import LoginIcon from '@assets/LoginIcon.png';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useState } from 'react';
 import {

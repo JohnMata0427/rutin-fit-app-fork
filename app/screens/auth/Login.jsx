@@ -6,7 +6,7 @@ import { PasswordField } from '@/components/PasswordField';
 import { AuthContext } from '@/contexts/AuthProvider';
 import { useLogin } from '@/models/useLogin';
 import { useProfile } from '@/models/useProfile';
-import LoginIcon from '@assets/loginIcon.png';
+import LoginIcon from '@assets/LoginIcon.png';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useContext, useState } from 'react';

@@ -21,10 +21,5 @@ export const registerPushNotifications = async token => {
       const notification_token = await getExpoPushTokenAsync();
       await requestSaveNotificationToken(token, notification_token.data);
     }
-  } catch {
-    Alert.alert(
-      'Mensaje del sistema',
-      'Ha ocurrido un error al intentar registrar las notificaciones.',
-    );
-  }
+  } catch {}
 };

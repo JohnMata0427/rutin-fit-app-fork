@@ -5,9 +5,7 @@ import { Login } from '@/screens/auth/Login';
 export function ProtectedRoute({ children }) {
   const { auth } = useContext(AuthContext);
 
-  if (!auth) {
-    return <Login />;
-  }
+  console.log(auth);
 
-  return children;
+  return auth ? children : <Login />;
 }

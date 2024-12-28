@@ -17,11 +17,22 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { orderOfDays } from '@/utils/utils'
 
 export function UpdateProfile({ navigation }) {
   const { token, auth, setAuth } = useContext(AuthContext);
   const { loading, handleUpdateProfile } = useProfile();
   const [form, setForm] = useState({});
+
+  const handleSelectDay = day => {
+    setForm(({ days }) => {
+      const newDays = days?.includes(day)
+        ? days.filter(d => d !== day)
+        : [...days, day];
+
+      return { ...form, days: newDays };
+    });
+  };
 
   const handleUpdateProfilePress = async () => {
     const response = await handleUpdateProfile(token, form);
@@ -121,18 +132,17 @@ export function UpdateProfile({ navigation }) {
           onValueChange={value => setForm({ ...form, levelactivity: value })}
           values={['principiante', 'intermedio', 'avanzado']}
         />
-        <InputField
-          multiline
-          label="Días de entrenamiento:"
-          value={form?.days?.join(', ')}
-          placeholder="Ingrese sus días disponibles para entrenar..."
-          onChangeText={value =>
-            setForm({
-              ...form,
-              days: value.split(',').map(day => day.trim()),
-            })
-          }
-        />
+        <View className="flex-row flex-wrap justify-center gap-4">
+          {orderOfDays.map(day => (
+            <View key={day} className="flex-row gap-x-2">
+              <TouchableOpacity
+                className={`size-5 border-2 ${form?.days?.includes(day) ? 'bg-primary' : 'bg-white'}`}
+                onPress={() => handleSelectDay(day)}
+              />
+              <Text>{day}</Text>
+            </View>
+          ))}
+        </View>
 
         <TouchableOpacity
           className="flex-row items-center justify-center gap-x-2 rounded-xl bg-primary p-2"

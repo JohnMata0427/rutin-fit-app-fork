@@ -2,7 +2,7 @@ import { AuthHeader } from '@/components/AuthHeader';
 import { Footer } from '@/components/Footer';
 import { PasswordField } from '@/components/PasswordField';
 import { useRecoveryPassword } from '@/models/useRecoveryPassword';
-import LoginIcon from '@assets/loginIcon.png';
+import LoginIcon from '@assets/LoginIcon.png';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useState } from 'react';
 import {

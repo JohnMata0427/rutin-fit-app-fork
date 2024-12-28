@@ -27,7 +27,6 @@ export function useRecoveryPassword() {
       const { res } = await requestNewPassword(form);
       return res;
     } catch (error) {
-      console.log(error.response.data.res);
       setMessage(error.response.data.res);
     } finally {
       setLoading(false);

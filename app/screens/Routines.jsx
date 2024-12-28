@@ -20,7 +20,7 @@ import {
 import { List } from 'react-native-paper';
 
 export function Routines() {
-  const { token, connected } = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
 
   const { handleRoutines, loadingRoutines, setLoadingRoutines } = useRoutines();
   const { loadingProgress, handleProgress } = useProgress();
@@ -61,7 +61,7 @@ export function Routines() {
 
   useEffect(() => {
     (async () => {
-      const response = await handleRoutines(token, connected);
+      const response = await handleRoutines(token);
       setRoutines(response);
       setLoadingRoutines(false);
     })();
@@ -85,7 +85,7 @@ export function Routines() {
             size={24}
             color="black"
           />
-          <Text className="text-2xl font-bold">No hay rutinas disponibles</Text>
+          <Text className="text-2xl font-bold text-center">No hay rutinas disponibles, contacta con tu entrenador</Text>
         </View>
       ) : (
         <ScrollView
@@ -190,6 +190,7 @@ export function Routines() {
                               <TouchableOpacity
                                 className="flex-row items-center justify-center gap-x-2 rounded-xl border-black bg-primary p-2"
                                 onPress={() => handleCheckDayPress(day)}
+                                disabled={loading}
                               >
                                 {loading ? (
                                   <ActivityIndicator

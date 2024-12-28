@@ -8,10 +8,10 @@ import { useState } from 'react';
 export function useProfile() {
   const [loading, setLoading] = useState(false);
 
-  const handleProfile = async (token, connected) => {
+  const handleProfile = async (token) => {
     setLoading(true);
     try {
-      const { client } = connected && (await requestViewProfile(token));
+      const { client } = await requestViewProfile(token);
       await AsyncStorage.setItem('@profile', JSON.stringify(client));
       return client;
     } catch {

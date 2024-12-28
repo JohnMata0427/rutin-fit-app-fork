@@ -65,7 +65,6 @@ export function Chat() {
             <Text className="my-4 p-1 text-center">{formattedDate}</Text>
           )}
           <Message
-            index={index}
             item={item}
             mySelf={mySelf}
             again={again}
@@ -135,19 +134,20 @@ export function Chat() {
             onChangeText={setNewMessage}
             placeholder="Escribe tu mensaje..."
           />
-          {connected ? (
-            <TouchableOpacity
-              onPress={sendNewMessage}
-              className="w-1/4 flex-row items-center justify-center gap-x-2 bg-primary"
-            >
-              <Text>Enviar</Text>
-              <MaterialCommunityIcons name="send" size={16} color="black" />
-            </TouchableOpacity>
-          ) : (
-            <View className="w-1/4 items-center justify-center">
+          <TouchableOpacity
+            onPress={sendNewMessage}
+            className="w-1/4 flex-row items-center justify-center gap-x-2 bg-primary"
+            disabled={!connected}
+          >
+            {connected ? (
+              <>
+                <Text>Enviar</Text>
+                <MaterialCommunityIcons name="send" size={16} color="black" />
+              </>
+            ) : (
               <MaterialCommunityIcons name="wifi-off" size={24} color="black" />
-            </View>
-          )}
+            )}
+          </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
     </View>

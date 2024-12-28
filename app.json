@@ -19,10 +19,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/LoginIcon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.johnmata0427.rutinfitappfork"
     },
     "web": {
-      "favicon": "./assets/LoginIcon.png"
+      "favicon": "./assets/LoginIcon.png",
+      "blunder": "metro"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "260c7938-2fb0-4725-9766-adb3be639364"
+      }
     }
   }
 }

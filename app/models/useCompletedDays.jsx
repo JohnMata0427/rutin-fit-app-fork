@@ -8,7 +8,7 @@ import { useState } from 'react';
 export function useCompletedDays() {
   const [loading, setLoading] = useState(false);
 
-  const handleCompletedDays = async token => {
+  const handleCompletedDays = async (token) => {
     try {
       const { completedDays } = await requestViewCompletedDays(token);
       await AsyncStorage.setItem(

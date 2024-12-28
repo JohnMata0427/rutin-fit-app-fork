@@ -19,12 +19,12 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     (async () => {
       const savedToken = await AsyncStorage.getItem('@auth_token');
-      savedToken && setToken(savedToken);
+      setToken(savedToken);
 
-      const profile = token && (await handleProfile(token, connected));
-      profile && setAuth(profile);
+      const profile = await handleProfile(token);
+      setAuth(profile);
     })();
-  }, [connected, token]);
+  }, [token]);
 
   return (
     <AuthContext.Provider value={{ auth, token, connected, setAuth, setToken }}>

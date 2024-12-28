@@ -5,9 +5,9 @@ import { useState } from 'react';
 export function useRoutines() {
   const [loadingRoutines, setLoadingRoutines] = useState(true);
 
-  const handleRoutines = async (token, connected) => {
+  const handleRoutines = async (token) => {
     try {
-      const { routine } = connected && (await requestViewRoutine(token));
+      const { routine } = await requestViewRoutine(token);
       await AsyncStorage.setItem('@routines', JSON.stringify(routine));
       return routine;
     } catch {

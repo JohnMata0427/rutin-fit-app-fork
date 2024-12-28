@@ -24,7 +24,6 @@ export function NewPassword({ navigation, route }) {
   });
 
   const handleNewPasswordPress = async () => {
-    console.log(form);
     const response = await handleNewPassword(form);
     Alert.alert('Mensaje del sistema', response || message);
     response && navigation.navigate('Login');

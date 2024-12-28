@@ -36,14 +36,18 @@ export function Footer({ navigation }) {
               </View>
             )}
           </Pressable>
-          <Pressable>
+          <Pressable
+            onPress={() => Linking.openURL('https://www.instagram.com/dustinmarcatoma')}
+          >
             {({ pressed }) => (
               <View className={pressed && 'opacity-50'}>
                 <Icon name="logo-instagram" size={30} color={'#ffff'} />
               </View>
             )}
           </Pressable>
-          <Pressable>
+          <Pressable
+            onPress={() => Linking.openURL('https://www.tiktok.com/@dustinmsj')}
+          >
             {({ pressed }) => (
               <View className={pressed && 'opacity-50'}>
                 <Icon name="logo-tiktok" size={30} color={'#ffff'} />
@@ -51,7 +55,9 @@ export function Footer({ navigation }) {
             )}
           </Pressable>
 
-          <Pressable>
+          <Pressable
+            onPress={() => Linking.openURL('https://wa.me/593979008923')}
+          >
             {({ pressed }) => (
               <View className={pressed && 'opacity-50'}>
                 <Icon name="logo-whatsapp" size={30} color={'#ffff'} />

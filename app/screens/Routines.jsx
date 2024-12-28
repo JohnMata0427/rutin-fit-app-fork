@@ -2,13 +2,14 @@ import { AuthContext } from '@/contexts/AuthProvider';
 import { useCompletedDays } from '@/models/useCompletedDays';
 import { useProgress } from '@/models/useProgress';
 import { useRoutines } from '@/models/useRoutines';
-import { FontAwesome5, AntDesign, Entypo } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { capitalize, formatDateToEC, orderOfDays } from '@/utils/utils';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Image,
   RefreshControl,
   ScrollView,
   Text,
@@ -16,19 +17,16 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { formatDateToEC, capitalize, orderOfDays } from '@/utils/utils';
 import { List } from 'react-native-paper';
-import { Image } from 'react-native';
 
 export function Routines() {
   const { token, connected } = useContext(AuthContext);
 
-  const { handleRoutines } = useRoutines();
+  const { handleRoutines, loadingRoutines, setLoadingRoutines } = useRoutines();
   const { loadingProgress, handleProgress } = useProgress();
   const { loading, handleCheckDay } = useCompletedDays();
 
   const [routines, setRoutines] = useState([]);
-  const [loadingRefresh, setLoadingRefresh] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [progress, setProgress] = useState({
     currentWeek: 0,
@@ -48,6 +46,7 @@ export function Routines() {
   const handleCheckDayPress = async day => {
     const response = await handleCheckDay(token, day);
     Alert.alert(
+      'Mensaje del sistema',
       response
         ? 'Felicidades por completar un día de entrenamiento'
         : 'Hubo un error en el sistema, o el día que intentas marcar no coincide con el día de entrenamiento actual',
@@ -57,25 +56,14 @@ export function Routines() {
   const handleProgressPress = async () => {
     const response = await handleProgress(token, progress);
     setProgress({ currentWeek: 0, observations: '' });
-    Alert.alert(response);
+    Alert.alert('Mensaje del sistema', response);
   };
 
   useEffect(() => {
     (async () => {
-      let getRoutines = [];
-      try {
-        getRoutines = connected && (await handleRoutines(token));
-        console.log("getRoutines 1",getRoutines[0]?._id)
-        await AsyncStorage.setItem('@routines', JSON.stringify(routines));
-      } catch {
-        const savedRoutines = await AsyncStorage.getItem('@routines');
-        console.log("savedRoutines", JSON.parse(savedRoutines)[0]?._id)
-        getRoutines = JSON.parse(savedRoutines);
-      } finally {
-        setLoadingRefresh(false);
-      }
-
-      setRoutines(getRoutines);
+      const response = await handleRoutines(token, connected);
+      setRoutines(response);
+      setLoadingRoutines(false);
     })();
   }, [token, refresh]);
 
@@ -88,11 +76,15 @@ export function Routines() {
         <Text className="text-center text-2xl font-medium">
           Rutinas Asignadas
         </Text>
-        <AntDesign name="switcher" size={20} color="black" />
+        <MaterialCommunityIcons name="calendar-star" size={20} color="black" />
       </LinearGradient>
       {routines?.length === 0 ? (
         <View className="items-center p-10">
-          <FontAwesome5 name="sad-tear" size={24} color="black" />
+          <MaterialCommunityIcons
+            name="emoticon-sad-outline"
+            size={24}
+            color="black"
+          />
           <Text className="text-2xl font-bold">No hay rutinas disponibles</Text>
         </View>
       ) : (
@@ -100,9 +92,9 @@ export function Routines() {
           className="flex-1 p-2"
           refreshControl={
             <RefreshControl
-              refreshing={loadingRefresh}
+              refreshing={loadingRoutines}
               onRefresh={() => {
-                setLoadingRefresh(true);
+                setLoadingRoutines(true);
                 setRefresh(!refresh);
               }}
             />
@@ -209,8 +201,8 @@ export function Routines() {
                                     <Text className="font-bold">
                                       Marcar como completado
                                     </Text>
-                                    <AntDesign
-                                      name="checkcircle"
+                                    <MaterialCommunityIcons
+                                      name="check-circle"
                                       size={16}
                                       color="black"
                                     />
@@ -280,7 +272,11 @@ export function Routines() {
               ) : (
                 <>
                   <Text className="font-bold">Guardar</Text>
-                  <Entypo name="save" size={20} color="black" />
+                  <MaterialCommunityIcons
+                    name="content-save"
+                    size={20}
+                    color="black"
+                  />
                 </>
               )}
             </TouchableOpacity>

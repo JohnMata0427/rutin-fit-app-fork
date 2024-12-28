@@ -1,9 +1,9 @@
 import { AuthContext } from '@/contexts/AuthProvider';
 import { useChat } from '@/models/useChat';
 import { BACKEND_URL } from '@/services/api-consumption';
-import { Feather, FontAwesome5, Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { formatDateToEC } from '@/utils/utils';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import {
   FlatList,
@@ -32,7 +32,7 @@ export function Chat() {
     const { _id, coach_id, user_id } = auth;
 
     const messageInfo = {
-      message: newMessage,
+      message: newMessage.trim(),
       transmitter: _id,
       receiver: coach_id._id,
       name: user_id.name,
@@ -95,7 +95,7 @@ export function Chat() {
   }, [token]);
 
   useEffect(() => {
-    messages?.length > 0 && flatListRef.current.scrollToEnd({ animated: true });
+    messages && flatListRef?.current?.scrollToEnd({ animated: true });
   }, [messages]);
 
   return (
@@ -105,7 +105,11 @@ export function Chat() {
         className="h-24 flex-row items-end justify-center gap-x-2 pb-4"
       >
         <Text className="text-2xl font-medium">Chatea con tu Entrenador</Text>
-        <FontAwesome5 name="user-friends" size={20} color="black" />
+        <MaterialCommunityIcons
+          name="account-supervisor"
+          size={20}
+          color="black"
+        />
       </LinearGradient>
 
       <KeyboardAvoidingView
@@ -120,7 +124,7 @@ export function Chat() {
             renderItem={renderMessage}
           />
         ) : (
-          <View className="flex-1"></View>
+          <View className="flex-1" />
         )}
 
         <View className="flex-row border-t-2 bg-white">
@@ -137,11 +141,11 @@ export function Chat() {
               className="w-1/4 flex-row items-center justify-center gap-x-2 bg-primary"
             >
               <Text>Enviar</Text>
-              <Ionicons name="send" size={16} color="black" />
+              <MaterialCommunityIcons name="send" size={16} color="black" />
             </TouchableOpacity>
           ) : (
             <View className="w-1/4 items-center justify-center">
-              <Feather name="wifi-off" size={24} color="black" />
+              <MaterialCommunityIcons name="wifi-off" size={24} color="black" />
             </View>
           )}
         </View>

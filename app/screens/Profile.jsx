@@ -1,11 +1,14 @@
+import { Field } from '@/components/Field';
 import { AuthContext } from '@/contexts/AuthProvider';
 import { useProfile } from '@/models/useProfile';
 import { registerPushNotifications } from '@/services/notifications';
-import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
+import { capitalize, orderOfDays } from '@/utils/utils';
+import PerfilFemenino from '@assets/perfilFemenino.webp';
+import PerfilMasculino from '@assets/perfilMasculino.webp';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { getPermissionsAsync } from 'expo-notifications';
-import { capitalize, orderOfDays } from '@/utils/utils';
 import { useContext, useEffect, useState } from 'react';
 import {
   Alert,
@@ -17,13 +20,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Perfil from '../../assets/Perfil.jpg';
 
 export function Profile({ navigation }) {
-  const { handleProfile } = useProfile();
-  const { auth, token, setAuth } = useContext(AuthContext);
+  const { handleProfile, loading } = useProfile();
+  const { auth, token, setAuth, setToken } = useContext(AuthContext);
   const [sendNotification, setSendNotification] = useState(false);
-  const [refresh, setRefresh] = useState(false);
 
   const handleChangeNotification = async send => {
     setSendNotification(send);
@@ -31,28 +32,29 @@ export function Profile({ navigation }) {
   };
 
   const refreshProfile = async () => {
-    setRefresh(true);
     try {
       const profile = await handleProfile(token);
       profile && setAuth(profile);
-    } finally {
-      setRefresh(false);
-    }
+    } catch {}
   };
 
   const requestLogout = () => {
-    Alert.alert('Cerrar Sesión', '¿Estás seguro que deseas cerrar sesión?', [
-      { text: 'Cancelar', style: 'cancel' },
-      {
-        text: 'Aceptar',
-        onPress: async () => {
-          try {
+    Alert.alert(
+      'Mensaje del sistema',
+      '¿Estás seguro que deseas cerrar sesión?',
+      [
+        { text: 'Cancelar' },
+        {
+          text: 'Aceptar',
+          onPress: async () => {
             await AsyncStorage.clear();
             navigation.navigate('Login');
-          } catch {}
+            setToken('');
+            setAuth(null);
+          },
         },
-      },
-    ]);
+      ],
+    );
   };
 
   useEffect(() => {
@@ -69,7 +71,9 @@ export function Profile({ navigation }) {
         className="h-52 items-center justify-end pb-2"
       >
         <Image
-          source={Perfil}
+          source={
+            auth?.genre === 'masculino' ? PerfilMasculino : PerfilFemenino
+          }
           className="size-36 rounded-full bg-white"
           resizeMode="contain"
         />
@@ -78,7 +82,7 @@ export function Profile({ navigation }) {
         className="m-2 flex-1"
         contentContainerStyle={{ justifyContent: 'center' }}
         refreshControl={
-          <RefreshControl refreshing={refresh} onRefresh={refreshProfile} />
+          <RefreshControl refreshing={loading} onRefresh={refreshProfile} />
         }
       >
         <View className="items-center">
@@ -90,7 +94,11 @@ export function Profile({ navigation }) {
               <Text className="text-center text-xl font-bold">
                 Editar Perfil
               </Text>
-              <AntDesign name="edit" size={24} color="black" />
+              <MaterialCommunityIcons
+                name="book-edit"
+                size={24}
+                color="black"
+              />
             </TouchableOpacity>
             <View className="flex-row items-center">
               <Text className="text-xl font-bold">Notificaciones: </Text>
@@ -103,7 +111,7 @@ export function Profile({ navigation }) {
           <Field title="Nombre:" value={auth?.user_id?.name} />
           <Field title="Apellido:" value={auth?.user_id?.lastname} />
           <Field title="Correo:" value={auth?.user_id?.email} />
-          <Field title="Género:" value={capitalize(auth.genre)} />
+          <Field title="Género:" value={capitalize(auth?.genre)} />
           <Field title="Peso:" value={auth?.weight + ' kg'} />
           <Field title="Altura:" value={auth?.height + ' cm'} />
           <Field title="Edad:" value={auth?.age + ' años'} />
@@ -131,20 +139,6 @@ export function Profile({ navigation }) {
           />
         </TouchableOpacity>
       </ScrollView>
-    </View>
-  );
-}
-
-function Field({ title, value }) {
-  return (
-    <View className="m-3 w-3/4 flex-col">
-      <View className="flex-row items-center gap-x-2">
-        <AntDesign name="star" size={17} color="black" />
-        <Text className="text-sm font-bold">{title}</Text>
-      </View>
-      <View className="rounded-b-2xl border-b-2 border-b-primary">
-        <Text className="text-center text-lg">{value}</Text>
-      </View>
     </View>
   );
 }

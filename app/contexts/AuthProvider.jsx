@@ -1,7 +1,7 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createContext, useEffect, useState } from 'react';
 import { useProfile } from '@/models/useProfile';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { addEventListener } from '@react-native-community/netinfo';
+import { createContext, useEffect, useState } from 'react';
 
 const AuthContext = createContext();
 
@@ -18,20 +18,13 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     (async () => {
-      const token = await AsyncStorage.getItem('@auth_token');
+      const savedToken = await AsyncStorage.getItem('@auth_token');
+      savedToken && setToken(savedToken);
 
-      let profile = {};
-      try {
-        profile = connected && (await handleProfile(token));
-      } catch {
-        const saved_profile = await AsyncStorage.getItem('@profile');
-        profile = JSON.parse(saved_profile);
-      }
-      
-      setAuth(profile);
-      setToken(token);
+      const profile = token && (await handleProfile(token, connected));
+      profile && setAuth(profile);
     })();
-  }, [connected]);
+  }, [connected, token]);
 
   return (
     <AuthContext.Provider value={{ auth, token, connected, setAuth, setToken }}>

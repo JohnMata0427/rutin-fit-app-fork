@@ -1,6 +1,6 @@
 import { Chat } from '@/screens/Chat';
-import { Progress } from '@/screens/Progress';
 import { Profile } from '@/screens/Profile';
+import { Progress } from '@/screens/Progress';
 import { Routines } from '@/screens/Routines';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';

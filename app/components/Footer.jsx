@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Linking, TouchableOpacity } from 'react-native';
+import { Linking, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export function Footer({ navigation }) {

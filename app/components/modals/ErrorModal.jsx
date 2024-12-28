@@ -1,5 +1,5 @@
-import { Modal, View, Text, Pressable, ScrollView } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Modal, Pressable, ScrollView, Text, View } from 'react-native';
 
 export function ErrorModal({ visible, onRequestClose, title, messages }) {
   return (
@@ -13,12 +13,12 @@ export function ErrorModal({ visible, onRequestClose, title, messages }) {
             alignItems: 'center',
           }}
         >
-          <Text className="text-center text-2xl">{title}</Text>
-          <View className="w-4/5 border-2 border-black" />
+          <Text className="text-2xl">{title}</Text>
+          <View className="w-4/5 gap-y-2 border-2 border-black" />
           {messages.map((message, index) => (
             <View key={index} className="flex-row items-center gap-x-2 p-4">
-              <MaterialIcons
-                name="report-gmailerrorred"
+              <MaterialCommunityIcons
+                name="alert-circle"
                 size={24}
                 color="black"
               />

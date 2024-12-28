@@ -1,7 +1,7 @@
 import {
+  getExpoPushTokenAsync,
   getPermissionsAsync,
   requestPermissionsAsync,
-  getExpoPushTokenAsync,
 } from 'expo-notifications';
 import { Alert } from 'react-native';
 import { requestSaveNotificationToken } from './api-consumption';
@@ -27,12 +27,4 @@ export const registerPushNotifications = async token => {
       'Ha ocurrido un error al intentar registrar las notificaciones.',
     );
   }
-};
-
-export const verificateTokenNotifications = async token => {
-  const { status } = await getPermissionsAsync();
-  if (status !== 'granted') return;
-
-  const notification_token = await getExpoPushTokenAsync();
-  await requestSaveNotificationToken(token, notification_token.data);
 };

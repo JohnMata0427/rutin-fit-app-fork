@@ -1,7 +1,6 @@
 import { AuthProvider } from '@/contexts/AuthProvider';
 import { TabNavigator } from '@/layouts/TabNavigator';
 import { ProtectedRoute } from '@/routes/ProtectedRoute';
-import { PublicRoute } from '@/routes/PublicRoute'
 import { ClientData } from '@/screens/auth/ClientData';
 import { ForgotPassword } from '@/screens/auth/ForgotPassword';
 import { Login } from '@/screens/auth/Login';
@@ -21,10 +20,15 @@ import './global.css';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [token, setToken] = useState('');
+
   useEffect(() => {
     (async () => {
       const savedToken = await AsyncStorage.getItem('@auth_token');
-      savedToken && (await registerPushNotifications(savedToken));
+      if (savedToken) {
+        setToken(savedToken);
+        await registerPushNotifications(savedToken);
+      }
     })();
   }, []);
 
@@ -33,23 +37,11 @@ export default function App() {
       <AuthProvider>
         <NavigationContainer>
           <StatusBar style="auto" />
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Main">
-              {() => (
-                <ProtectedRoute>
-                  <TabNavigator />
-                </ProtectedRoute>
-              )}
-            </Stack.Screen>
-            <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
-
-            <Stack.Screen name="Login">
-              {() => (
-                <PublicRoute>
-                  <Login />
-                </PublicRoute>
-              )}
-            </Stack.Screen>
+          <Stack.Navigator
+            initialRouteName={token ? 'Main' : 'Login'}
+            screenOptions={{ headerShown: false }}
+          >
+            <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />
             <Stack.Screen name="ClientData" component={ClientData} />
 
@@ -57,6 +49,16 @@ export default function App() {
             <Stack.Screen name="NewPassword" component={NewPassword} />
 
             <Stack.Screen name="QuienesSomos" component={QuienesSomos} />
+
+            <Stack.Screen name="Main">
+              {() => (
+                <ProtectedRoute>
+                  <TabNavigator />
+                </ProtectedRoute>
+              )}
+            </Stack.Screen>
+
+            <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
           </Stack.Navigator>
         </NavigationContainer>
       </AuthProvider>
